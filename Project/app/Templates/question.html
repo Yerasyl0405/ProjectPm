@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Therapy Questionnaire</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        h3 {
+            color: #5c6bc0;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            background-color: #f4f6ff;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        label:hover {
+            background-color: #e2e6ff;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #5c6bc0;
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #3f51b5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Therapy Questionnaire</h1>
+
+        <div>
+            <h3>{{ question.question }}</h3>
+            <form action="" method="POST">
+                {% if question.variant_a %}
+                    <label>
+                        <input type="radio" name="answer" value="{{ question.variant_a }}" required>
+                        {{ question.variant_a }}
+                    </label>
+                {% endif %}
+                {% if question.variant_b %}
+                    <label>
+                        <input type="radio" name="answer" value="{{ question.variant_b }}">
+                        {{ question.variant_b }}
+                    </label>
+                {% endif %}
+                {% if question.variant_c %}
+                    <label>
+                        <input type="radio" name="answer" value="{{ question.variant_c }}">
+                        {{ question.variant_c }}
+                    </label>
+                {% endif %}
+                {% if question.variant_d %}
+                    <label>
+                        <input type="radio" name="answer" value="{{ question.variant_d }}">
+                        {{ question.variant_d }}
+                    </label>
+                {% endif %}
+                {% if question.variant_e %}
+                    <label>
+                        <input type="radio" name="answer" value="{{ question.variant_e }}">
+                        {{ question.variant_e }}
+                    </label>
+                {% endif %}
+                <button type="submit">Далее</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a2e;
+            color: white;
+            height: 100vh;
+            background: url('https://example.com/stars-bg.jpg') no-repeat center center fixed; /* Космическая тема */
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .profile-container {
+            width: 90%;
+            max-width: 400px;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
+        }
+        .profile-container h1 {
+            margin-bottom: 15px;
+        }
+        .profile-container img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid #e94560;
+        }
+        .profile-container .btn {
+            background-color: #e94560;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            margin: 10px 0;
+            width: 100%;
+        }
+        .menu {
+            list-style-type: none;
+            margin-top: 20px;
+        }
+        .menu li {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            justify-content: space-between;
+        }
+        .menu li span {
+            background-color: #0f3460;
+            padding: 5px 10px;
+            border-radius: 50%;
+        }
+        .logout-btn {
+            background-color: #e94560;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
+        .bottom-nav {
+            position: absolute;
+            bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 400px;
+        }
+        .bottom-nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+            padding: 10px;
+        }
+    </style>
+    <script>
+        function logout() {
+            // Перенаправляем на страницу логина
+            window.location.href = '/login';  // Замените '/login' на ваш маршрут к странице логина
+        }
+    </script>
+</head>
+<body>
+
+<div class="profile-container">
+    <img src="https://via.placeholder.com/100" alt="Profile Picture">
+    <h1>Amy Clark</h1>
+    <button class="btn">Edit Profile</button>
+
+    <ul class="menu">
+        <li>Notifications <span>12</span></li>
+        <li>Messages <span>1</span></li>
+        <li>My Therapist</li>
+        <li>Help</li>
+        <li>Settings</li>
+    </ul>
+
+    <button class="logout-btn" onclick="login()">Log Out </button> <!-- Кнопка для выхода -->
+</div>
+
+<div class="bottom-nav">
+    <a href="#">&#8962;</a> <!-- Home Icon -->
+    <a href="#">&#9993;</a> <!-- Messages Icon -->
+    <a href="#">&#9881;</a> <!-- Settings Icon -->
+</div>
+
+</body>
+</html>
+
