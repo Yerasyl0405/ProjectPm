@@ -1,0 +1,78 @@
+/* styles.css */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.background {
+    background: url('signin_background.png') no-repeat center center/cover; /* Replace with the actual background image URL */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFF;
+}
+
+.form-container {
+    background-color: rgba(0, 0, 0, 0.2); /* Semi-transparent overlay */
+    border-radius: 10px;
+    padding: 30px 30px;
+    text-align: center;
+    width: 400px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #E8C091; /* Golden text color */
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+
+}
+
+label {
+    text-align: left;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+input {
+    margin-top: 5px;
+
+    padding:10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+}
+
+button {
+    margin-top: 20px;
+    background-color: #C0946D; /* Button color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 50%; /* Adjust the width to your desired size */
+    align-self: center; /* Center-aligns the button */
+}
+
+button:hover {
+    background-color: #A07A56; /* Darker button on hover */
+}
+
+
+input:focus, button:focus {
+    outline: none;
+}
+
+input::placeholder {
+    color: #C5C5C5;
+    font-style: italic;
+}
