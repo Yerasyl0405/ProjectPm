@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подтверждение записи</title>
 </head>
 <body>
-$END$
+    <h1>Запись на прием подтверждена</h1>
+    <p>Вы записались на прием к психологу {{ therapist.first_name }} {{ therapist.last_name }} в {{ time }}.</p>
+    <a href="{{ url_for('auth.index') }}">Вернуться на главную</a>
 </body>
 </html>

@@ -3,55 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatGPT Chat</title>
+    <title>ChatGPT Web Page</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        #chat-box { max-width: 600px; margin: auto; border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: scroll; }
-        .user { color: blue; margin-bottom: 10px; }
-        .bot { color: green; margin-bottom: 10px; }
-        input, button { margin: 5px; padding: 10px; font-size: 16px; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #chat-box {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        #input-box {
+            display: flex;
+            gap: 10px;
+        }
+        #input-box input {
+            flex: 1;
+            padding: 10px;
+        }
+        #input-box button {
+            padding: 10px;
+        }
     </style>
 </head>
 <body>
-    <h1>ChatGPT Chat</h1>
+    <h1>Chat with GPT</h1>
     <div id="chat-box"></div>
-    <input type="text" id="user-input" placeholder="Type your message..." />
-    <button onclick="sendMessage()">Send</button>
+    <div id="input-box">
+        <input type="text" id="user-input" placeholder="Type your message here">
+        <button onclick="sendMessage()">Send</button>
+    </div>
 
     <script>
         const chatBox = document.getElementById('chat-box');
-
-        function addMessage(role, message) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = role;
-            messageDiv.textContent = `${role === 'user' ? 'You' : 'Bot'}: ${message}`;
-            chatBox.appendChild(messageDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
+        const userInput = document.getElementById('user-input');
 
         async function sendMessage() {
-            const userInput = document.getElementById('user-input');
-            const message = userInput.value.trim();
+            const message = userInput.value;
             if (!message) return;
 
-            addMessage('user', message);
+            // Отображаем сообщение пользователя
+            appendMessage('User', message);
             userInput.value = '';
 
             try {
                 const response = await fetch('/chat', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message })
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message }),
                 });
+
                 const data = await response.json();
                 if (data.reply) {
-                    addMessage('bot', data.reply);
+                    appendMessage('GPT', data.reply);
                 } else {
-                    addMessage('bot', 'Error: ' + (data.error || 'Unknown error'));
+    appendMessage('Error', `Error: ${data.error}. Details: ${JSON.stringify(data.details || {})}`);
                 }
-            } catch (err) {
-                addMessage('bot', 'Error: Failed to connect to the server');
+            } catch (error) {
+    appendMessage('Error', `Error: ${data.error}. Details: ${JSON.stringify(data.details || {})}`);
             }
+        }
+
+        function appendMessage(sender, message) {
+            const messageElement = document.createElement('div');
+            messageElement.textContent = `${sender}: ${message}`;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight; // Прокручиваем вниз
         }
     </script>
 </body>

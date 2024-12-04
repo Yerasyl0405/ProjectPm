@@ -1,10 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Выбор времени</title>
 </head>
 <body>
-$END$
+    <h1>Выберите время для психолога {{ therapist.first_name }} {{ therapist.last_name }}</h1>
+    <form method="POST">
+        <label for="time">Доступное время:</label>
+        <select name="time" id="time">
+            {% for time in available_times %}
+            <option value="{{ time }}">{{ time }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit">Подтвердить</button>
+    </form>
 </body>
 </html>
+
