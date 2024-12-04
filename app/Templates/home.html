@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Personal Room</title>
+<style>
+    /* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  padding: 20px;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  padding: 20px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+header h1 {
+  font-size: 24px;
+  color: #2a4d8f;
+}
+
+.therapists {
+  background-color: #4caf50;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.therapists:hover {
+  background-color: #45a049;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #2a4d8f;
+  margin-right: 15px;
+}
+
+.user-info h2 {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.edit-profile {
+  font-size: 14px;
+  color: #2a4d8f;
+  text-decoration: none;
+}
+
+.edit-profile:hover {
+  text-decoration: underline;
+}
+
+.menu {
+  border-top: 1px solid #ddd;
+}
+
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+  text-decoration: none;
+  color: #333;
+}
+
+.menu-item:hover {
+  background-color: #f1f1f1;
+}
+
+.menu-item span {
+  font-size: 16px;
+}
+
+.badge {
+  background-color: #d1e7ff;
+  color: #2a4d8f;
+  padding: 2px 8px;
+  font-size: 14px;
+  border-radius: 12px;
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Your personal room</h1>
+      <a href="/therapists" class="button">My Therapists (3)</a>
+    </header>
+    <main>
+      <div class="profile">
+        <div class="avatar"></div>
+        <div class="user-info">
+          <h2>{{ first_name }} {{ last_name }}</h2>
+          <a href="#" class="edit-profile">Edit Profile</a>
+        </div>
+      </div>
+      <nav class="menu">
+        <a href="#" class="menu-item">
+          <i class="icon">☰</i>
+          <span>Notifications</span>
+          <span class="badge">12</span>
+        </a>
+        <a href="#" class="menu-item">
+          <i class="icon">💬</i>
+          <span>Messages</span>
+          <span class="badge">1</span>
+        </a>
+        <a href="#" class="menu-item">
+          <i class="icon">❓</i>
+          <span>Help</span>
+        </a>
+        <a href="#" class="menu-item">
+          <i class="icon">⚙️</i>
+          <span>Settings</span>
+        </a>
+        <a href="#" class="menu-item">
+          <i class="icon">↩️</i>
+          <span>Log Out</span>
+          <span class="badge">6</span>
+        </a>
+      </nav>
+    </main>
+  </div>
+</body>
+</html>
+
+
