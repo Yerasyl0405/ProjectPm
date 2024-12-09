@@ -43,105 +43,118 @@ def is_valid_password(password):
     if not re.search(r"\d", password):
         return False  # Нет цифр
     return True
-
 @question_bp.route('/question_and_registration', methods=['GET', 'POST'])
 def question_and_registration():
     questions = Question.query.all()  # Получаем все вопросы
     error = session.pop('error', None)  # Извлекаем ошибку из сессии, если она есть
 
     if request.method == 'POST':
+        try:
+            # Сначала обрабатываем форму ответов на вопросы
+            name = request.form.get('name')  # Имя из формы
+            concerns = request.form.get('concerns')  # Концерны (если есть)
+            selected_issues = request.form.getlist('issues')  # Выбранные проблемы (чекбоксы)
 
-        # Сначала обрабатываем форму ответов на вопросы
-        name = request.form.get('name')  # Имя из формы
-        concerns = request.form.get('concerns')  # Концерны (если есть)
-        selected_issues = request.form.getlist('issues')
-        # Выбранные проблемы (множество чекбоксов)
-        # Подсчёт количества выборов по категориям
-        categories = {
-            "What has been worrying you recently?": [
-                "Panic attacks", "Stress", "Constant headaches", "Personal Fears", "Phobias", "Burnouts", "Irritations"
-            ],
-            "Relationships": [
-                "With kids", "With partner", "Conflicts", "Getting divorced", "Personal Boundaries", "Work Colleagues",
-                "Parents"
-            ],
-            "Crisis and Life worries": [
-                "Loneliness", "Self-Esteem", "Financial crisis", "Searching the meaning of life",
-                "Losing someone important"
-            ],
-            "Personal growth and Career goals": [
-                "Procrastination", "Goals", "Lack of motivation", "Losing a job", "Searching inner peace"
-            ],
-            "Addictions": [
-                "Addictive relationships", "Alcohol", "Gaming", "Drug addiction"
-            ],
-            "Perinatal psychology": [
-                "Miscarriage", "Abortion", "Pregnancy planning", "Infertility", "Childbirth"
-            ],
-            "Psychosomatics": [
-                "surgeries", "head aches", "skin", "inner illnesses", "oncology"
-            ]
-        }
-        category_counts = {
-            category: sum(1 for issue in selected_issues if issue in options)
-            for category, options in categories.items()
-        }
+            # Подсчёт количества выборов по категориям
+            categories = {
+                "What has been worrying you recently?": [
+                    "Panic attacks", "Stress", "Constant headaches", "Personal Fears", "Phobias", "Burnouts", "Irritations"
+                ],
+                "Relationships": [
+                    "With kids", "With partner", "Conflicts", "Getting divorced", "Personal Boundaries", "Work Colleagues",
+                    "Parents"
+                ],
+                "Crisis and Life worries": [
+                    "Loneliness", "Self-Esteem", "Financial crisis", "Searching the meaning of life",
+                    "Losing someone important"
+                ],
+                "Personal growth and Career goals": [
+                    "Procrastination", "Goals", "Lack of motivation", "Losing a job", "Searching inner peace"
+                ],
+                "Addictions": [
+                    "Addictive relationships", "Alcohol", "Gaming", "Drug addiction"
+                ],
+                "Perinatal psychology": [
+                    "Miscarriage", "Abortion", "Pregnancy planning", "Infertility", "Childbirth"
+                ],
+                "Psychosomatics": [
+                    "surgeries", "head aches", "skin", "inner illnesses", "oncology"
+                ]
+            }
 
-        # Топ-3 категории
-        sorted_categories = sorted(category_counts.items(), key=lambda x: x[1], reverse=True)
-        top_categories = [cat[0] for cat in sorted_categories[:3]]
+            category_counts = {
+                category: sum(1 for issue in selected_issues if issue in options)
+                for category, options in categories.items()
+            }
 
-        # Проверяем, существует ли уже пользователь с таким именем
+            # Топ-3 категории
+            sorted_categories = sorted(category_counts.items(), key=lambda x: x[1], reverse=True)
+            top_categories = [cat[0] for cat in sorted_categories[:3]]
 
-        # Теперь обрабатываем регистрацию пользователя
-        first_name = request.form.get('first_name')
-        last_name = request.form.get('last_name')
-        email = request.form.get('email')
-        password = request.form.get('password')
-        if not is_valid_password(password):
-            session['error'] = "Password must be at least 8 characters long and contain both letters and numbers."
+            # Теперь обрабатываем регистрацию пользователя
+            first_name = request.form.get('first_name')
+            last_name = request.form.get('last_name')
+            email = request.form.get('email')
+            password = request.form.get('password')
+
+            # Валидации
+            if not is_valid_password(password):
+                raise ValueError("Password must be at least 8 characters long and contain both letters and numbers.")
+
+            if not is_email_valid(email):
+                raise ValueError("The provided email address is invalid or does not exist.")
+
+            if User.query.filter_by(username=name).first():
+                raise ValueError("Username already exists.")
+
+            if User.query.filter_by(email=email).first() or Therapist.query.filter_by(email=email).first():
+                raise ValueError("Email already exists.")
+
+            # Генерация кода подтверждения
+            verification_code = generate_verification_code()
+
+            # Создание нового пользователя
+            new_user = User(
+                first_name=first_name,
+                last_name=last_name,
+                username=name,
+                email=email,
+                password=bcrypt.generate_password_hash(password).decode('utf-8'),
+                verification_code=verification_code
+            )
+
+            # Создание категорий пользователя
+            usercategories = UserCategories(
+                user_id=new_user.id,
+                category_1=top_categories[0] if len(top_categories) > 0 else None,
+                category_2=top_categories[1] if len(top_categories) > 1 else None,
+                category_3=top_categories[2] if len(top_categories) > 2 else None
+            )
+
+            # Сохраняем в базу данных
+            db.session.add(new_user)
+            db.session.commit()
+
+            # Добавляем категории только после сохранения пользователя
+            db.session.add(usercategories)
+            db.session.commit()
+
+            # Отправляем email для подтверждения
+            send_verification_emaill(email, verification_code)
+
+            # Перенаправляем на страницу подтверждения email
+            return redirect(url_for('auth.verify_email', user_id=new_user.id))
+
+        except ValueError as ve:
+            # Валидационные ошибки
+            session['error'] = str(ve)
             return redirect(url_for('question.question_and_registration'))
 
-        if not is_email_valid(email):
-            session['error'] = "The provided email address is invalid or does not exist."
+        except Exception as e:
+            # Общие ошибки
+            session['error'] = "An error occurred during registration. Please try again."
+            db.session.rollback()  # Откатываем изменения в базе данных
             return redirect(url_for('question.question_and_registration'))
-        # Проверяем, существует ли уже пользователь с таким именем или email
-        if User.query.filter_by(username=name).first():
-            session['error'] = "Имя пользователя уже существует."
-            return redirect(url_for('question.question_and_registration'))
-
-        if User.query.filter_by(email=email).first() or Therapist.query.filter_by(email=email).first():
-            session['error'] = "Этот email уже существует."
-            return redirect(url_for('question.question_and_registration'))
-
-        # Генерация кода подтверждения
-        verification_code = generate_verification_code()
-
-        # Создаем нового пользователя
-        new_user = User(
-            first_name=first_name,
-            last_name=last_name,
-            username=name,
-            email=email,
-            password=bcrypt.generate_password_hash(password).decode('utf-8'),
-            verification_code=verification_code
-        )
-        db.session.add(new_user)
-        db.session.commit()
-        usercategories = UserCategories(
-            user_id=new_user.id,
-            category_1=top_categories[0] if len(top_categories) > 0 else None,
-            category_2=top_categories[1] if len(top_categories) > 1 else None,
-            category_3=top_categories[2] if len(top_categories) > 2 else None
-        )
-        db.session.add(usercategories)
-        db.session.commit()
-
-        # Отправляем email для подтверждения
-        send_verification_emaill(email, verification_code)
-
-        # Перенаправляем на страницу подтверждения email
-        return redirect(url_for('auth.verify_email', user_id=new_user.id))
 
     # Если запрос GET, отображаем форму
     return render_template('question_and_registration.html', questions=questions, error=error)

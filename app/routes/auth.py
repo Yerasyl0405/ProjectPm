@@ -87,6 +87,7 @@ def is_valid_password(password):
     if not re.search(r"\d", password):
         return False  # Нет цифр
     return True
+from flask import flash  # Если хотите использовать flash вместо session
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
@@ -97,69 +98,80 @@ def register():
         password = request.form['password']
         user_type = request.form['user_type']
         selected_categories = request.form.getlist('issues')
+
+        # Проверка пароля
         if not is_valid_password(password):
-            session['error'] = "Password must be at least 8 characters long and contain both letters and numbers."
+            flash("Password must be at least 8 characters long and contain both letters and numbers.", 'error')
             return redirect(url_for('auth.register'))
 
-        # Проверяем, существует ли email
+        # Проверка валидности email
         if not is_email_valid(email):
-            session['error'] = "The provided email address is invalid or does not exist."
+            flash("The provided email address is invalid or does not exist.", 'error')
             return redirect(url_for('auth.register'))
 
-        # Проверяем, не используется ли email уже
+        # Проверка на существующий email
         if User.query.filter_by(email=email).first() or Therapist.query.filter_by(email=email).first():
-            session['error'] = "Email already exists."
+            flash("Email already exists.", 'error')
             return redirect(url_for('auth.register'))
 
-        # Хешируем пароль
-        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        try:
+            # Хешируем пароль
+            hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
-        # Генерируем код подтверждения
-        verification_code = generate_verification_code()
+            # Генерируем код подтверждения
+            verification_code = generate_verification_code()
 
-        if user_type == 'user':
-            # Регистрация как пользователь
-            new_user = User(
-                first_name=first_name,
-                last_name=last_name,
-                email=email,
-                password=hashed_password,
-                verification_code=verification_code
-            )
-            db.session.add(new_user)
-            db.session.commit()
+            if user_type == 'user':
+                # Регистрация как пользователь
+                new_user = User(
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    password=hashed_password,
+                    verification_code=verification_code
+                )
+                db.session.add(new_user)
+                db.session.commit()
 
-            # Отправляем email с кодом подтверждения
-            send_verification_emaill(email, verification_code)
+                # Отправляем email с кодом подтверждения
+                send_verification_emaill(email, verification_code)
 
-            # Перенаправляем на страницу подтверждения email
-            return redirect(url_for('auth.verify_email', user_id=new_user.id))
+                # Перенаправляем на страницу подтверждения email
+                return redirect(url_for('auth.verify_email', user_id=new_user.id))
 
-        elif user_type == 'therapist':
-            # Регистрация как терапевт
-            new_therapist = Therapist(
-                first_name=first_name,
-                last_name=last_name,
-                email=email,
-                password=hashed_password,
-                verification_code=verification_code
-            )
-            db.session.add(new_therapist)
-            db.session.commit()
-            for category in selected_categories:
-                therapist_category = TherapistCategory(therapist_id=new_therapist.id, category_name=category)
-                db.session.add(therapist_category)
+            elif user_type == 'therapist':
+                # Регистрация как терапевт
+                new_therapist = Therapist(
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    password=hashed_password,
+                    verification_code=verification_code
+                )
+                db.session.add(new_therapist)
+                db.session.commit()
 
-            db.session.commit()
-            # Отправляем email с кодом подтверждения
-            send_verification_emaill(email, verification_code)
+                # Добавляем категории терапевта
+                for category in selected_categories:
+                    therapist_category = TherapistCategory(therapist_id=new_therapist.id, category_name=category)
+                    db.session.add(therapist_category)
 
-            # Перенаправляем на страницу подтверждения email
-            return redirect(url_for('auth.verify_email', user_id=new_therapist.id))
+                db.session.commit()
 
-    # Получаем возможную ошибку из сессии
-    error = session.pop('error', None)
-    return render_template('registration.html', error=error)
+                # Отправляем email с кодом подтверждения
+                send_verification_emaill(email, verification_code)
+
+                # Перенаправляем на страницу подтверждения email
+                return redirect(url_for('auth.verify_email', user_id=new_therapist.id))
+
+        except Exception as e:
+            # Логируем ошибку и показываем сообщение пользователю
+            flash("An error occurred during registration. Please try again.", 'error')
+            db.session.rollback()  # Откатываем изменения в базе данных
+            return redirect(url_for('auth.register'))
+
+    # Передаем error из flash-сообщений в шаблон
+    return render_template('registration.html')
 
 @auth_bp.route('/verify_email/<int:user_id>', methods=['GET', 'POST'])
 def verify_email(user_id):

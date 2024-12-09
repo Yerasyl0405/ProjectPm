@@ -30,7 +30,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 20px;
+    padding:  20px;
     background-color: #1E1E3C;
     color: #FFF;
     width: 100%;
@@ -137,7 +137,6 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     max-width: 600px;
     width: 100%;  /* Allow container to be responsive */
-    margin-top: 20px; /* Optional, space above the form */
 }
 
 
@@ -268,12 +267,19 @@ footer p {
     <div class="container">
 
             <h1>Therapist Registration</h1>
-            {% if error %}
-        <p style="color: red;">{{ error }}</p>
-        {% endif %}
+
 
 
             <form action="{{ url_for('auth.register') }}" method="POST" enctype="multipart/form-data">
+                 {% with messages = get_flashed_messages(category_filter=['error']) %}
+        {% if messages %}
+            <ul style="color: red;">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
                 <input type="hidden" name="user_type" value="therapist">
 
             <div class="form-group">
