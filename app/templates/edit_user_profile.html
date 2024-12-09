@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile - {{ user.first_name }} {{ user.last_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fb;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+background-color: #1E1E3C;
+    color: #FFF;
+      padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .logout-btn {
+            background-color: #ff6b6b;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .logout-btn:hover {
+            background-color: #e64c4c;
+        }
+
+        /* Edit Profile Form */
+        .edit-profile-container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #FFFFFF;
+    font-size: 16px;
+}
+
+        h2 {
+             text-align: center;
+    color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-size: 16px;
+            color: #555;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        input[type="file"] {
+            padding: 5px;
+        }
+
+        .form-group button {
+      width: 100%;
+    padding: 12px;
+    background-color: #1E1E3C;;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+        }
+
+        .form-group button:hover {
+    background-color: #B0B0B0; /* Grey color on hover */
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .edit-profile-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-title">Add some basic info about yourself</div>
+                    <nav class="nav-links">
+
+        <a href="#" onclick="goBack()">Back</a>
+                        </nav>
+
+        <a href="{{ url_for('auth.login') }}" class="logout-btn">Logout</a>
+    </header>
+
+    <div class="edit-profile-container">
+        <h2>Edit Your Profile</h2>
+        <form action="{{ url_for('auth.edit_user_profile', id=user.id) }}" method="POST" enctype="multipart/form-data">
+            <!-- First Name -->
+            <div class="form-group">
+                <label for="first_name">First Name</label>
+                <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" required>
+            </div>
+
+            <!-- Last Name -->
+            <div class="form-group">
+                <label for="last_name">Last Name</label>
+                <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" required>
+            </div>
+
+            <!-- Username -->
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" value="{{ user.username }}" required>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" value="{{ user.email }}" required>
+            </div>
+
+            <!-- Birthday -->
+            <div class="form-group">
+                <label for="birthday">Birthday</label>
+                <input type="date" id="birthday" name="birthday" value="{{ user.birthday.strftime('%Y-%m-%d') if user.birthday else '' }}">
+            </div>
+
+            <!-- Avatar -->
+            <div class="form-group">
+                <label for="avatar">Change Avatar</label>
+                <input type="file" id="avatar" name="avatar">
+                {% if user.avatar %}
+                    <p>Current Avatar:</p>
+                    <img src="{{ url_for('auth.get_avatar', id=user.id) }}" alt="Current Avatar" class="avatar-preview" width="120">
+                {% else %}
+                    <p>No Avatar Set</p>
+                {% endif %}
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group">
+                <button type="submit">Save Changes</button>
+            </div>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 User Platform. All rights reserved.</p>
+    </footer>
+</body>
+</html>

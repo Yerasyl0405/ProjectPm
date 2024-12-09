@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Certificates - {{ therapist.first_name }} {{ therapist.last_name }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fb;
+            margin: 0;
+            padding: 0;
+        }
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        h1 {
+            font-size: 24px;
+            text-align: center;
+        }
+        form {
+            margin-top: 20px;
+        }
+        input[type="file"] {
+            display: block;
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .certificates {
+            margin-top: 30px;
+        }
+        .certificates h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .certificate-item {
+            margin-bottom: 15px;
+        }
+        .certificate-item a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .certificate-item a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Back Button -->
+    <a href="{{ url_for('auth.therapist_profile', id=therapist.id) }}" class="back-button">Back</a>
+
+    <div class="container">
+        <h1>Manage Certificates for {{ therapist.first_name }} {{ therapist.last_name }}</h1>
+        <form action="" method="post" enctype="multipart/form-data">
+            <label for="certificate">Upload New Certificate:</label>
+            <input type="file" id="certificate" name="certificate" accept="application/pdf, image/*">
+            <button type="submit">Upload</button>
+        </form>
+
+        <div class="certificates">
+            <h2>Uploaded Certificates</h2>
+            {% if certificates %}
+                {% for cert in certificates %}
+                    <div class="certificate-item">
+                        <a href="{{ url_for('auth.download_certificate', certificate_id=cert.id) }}">
+                            Download {{ cert.filename }}
+                        </a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No certificates uploaded yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
+

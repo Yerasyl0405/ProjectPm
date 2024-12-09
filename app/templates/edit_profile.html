@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile - {{ therapist.first_name }} {{ therapist.last_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* Your existing styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .profile-container {
+            width: 50%;
+            margin: 50px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Making the time input field larger */
+        .large-time {
+            width: 250px; /* Adjust the width */
+            height: 40px; /* Increase the height */
+            font-size: 18px; /* Larger text size */
+            padding: 5px; /* Add padding for better spacing */
+            border: 2px solid #ccc; /* Optional: Add a border */
+            border-radius: 5px; /* Optional: Add rounded corners */
+        }
+
+        h2, h3, h4 {
+            color: #333;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="file"] {
+            display: block;
+            margin-top: 10px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #1E1E3C;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #B0B0B0; /* Grey color on hover */
+        }
+
+        footer {
+            text-align: center;
+            padding-top: 20px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        /* Avatar image styling */
+        .avatar-preview {
+            max-width: 150px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <header class="header">
+            <h1>Edit Profile: {{ therapist.first_name }} {{ therapist.last_name }}</h1>
+        </header>
+
+        <section class="profile-info">
+            <h2>Edit Personal Information</h2>
+            <form method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="first_name">First Name:</label>
+                    <input type="text" id="first_name" name="first_name" value="{{ therapist.first_name }}" required><br>
+                </div>
+
+                <div class="form-group">
+                    <label for="last_name">Last Name:</label>
+                    <input type="text" id="last_name" name="last_name" value="{{ therapist.last_name }}" required><br>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" value="{{ therapist.email }}" required><br>
+                </div>
+
+                <div class="form-group">
+                    <label for="birthday">Birthday:</label>
+                    <input type="date" id="birthday" name="birthday" value="{{ therapist.birthday }}" required><br>
+                </div>
+
+                <!-- Avatar Upload -->
+                <div class="form-group">
+                    <label for="avatar">Upload Avatar:</label>
+                    <input type="file" id="avatar" name="avatar" accept="image/*" onchange="previewAvatar(event)"><br>
+
+                    {% if therapist.image %}
+                        <div>
+                            <p>Current Avatar:</p>
+                            <img src="{{ url_for('auth.get_avatar', id=therapist.id) }}" alt="Current Avatar" class="avatar-preview">
+                        </div>
+                    {% endif %}
+
+                    <!-- Avatar Preview -->
+                    <div id="avatar-preview-container" style="display: none;">
+                        <p>New Avatar Preview:</p>
+                        <img id="avatar-preview" class="avatar-preview">
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Save Changes</button>
+            </form>
+        </section>
+
+        <section class="available-times">
+            <h4>Add New Available Time</h4>
+            <form method="POST" action="{{ url_for('auth.therapist_profile', id=therapist.id) }}">
+                <div class="form-group">
+                    <label for="date">Select Date:</label>
+                    <input type="date" id="date" name="date" required><br>
+                </div>
+
+                <div class="form-group">
+                    <label for="time">Select Start Time:</label>
+                    <input type="time" id="time" name="time" class="large-time" required><br>
+                </div>
+
+                <div class="form-group">
+                    <label for="end_time">Select End Time:</label>
+                    <input type="time" id="end_time" name="end_time" class="large-time" value="{{ start_time_plus_1_hour }}" required><br>
+                </div>
+
+                <button type="submit" class="submit-btn">Add Available Time</button>
+            </form>
+        </section>
+
+        <footer>
+            <p>Edit Therapist Profile Page</p>
+        </footer>
+    </div>
+
+    <script>
+        // Preview the selected avatar image
+        function previewAvatar(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const avatarPreview = document.getElementById('avatar-preview');
+                const previewContainer = document.getElementById('avatar-preview-container');
+
+                avatarPreview.src = e.target.result;
+                previewContainer.style.display = 'block';
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+</body>
+</html>
+
