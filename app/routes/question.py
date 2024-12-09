@@ -43,6 +43,7 @@ def is_valid_password(password):
     if not re.search(r"\d", password):
         return False  # Нет цифр
     return True
+
 @question_bp.route('/question_and_registration', methods=['GET', 'POST'])
 def question_and_registration():
     questions = Question.query.all()  # Получаем все вопросы
@@ -53,7 +54,7 @@ def question_and_registration():
             # Сначала обрабатываем форму ответов на вопросы
             name = request.form.get('name')  # Имя из формы
             concerns = request.form.get('concerns')  # Концерны (если есть)
-            selected_issues = request.form.getlist('issues')  # Выбранные проблемы (чекбоксы)
+            selected_issues = request.form.getlist('issues')  # Выбранные проблемы (множество чекбоксов)
 
             # Подсчёт количества выборов по категориям
             categories = {
@@ -61,12 +62,10 @@ def question_and_registration():
                     "Panic attacks", "Stress", "Constant headaches", "Personal Fears", "Phobias", "Burnouts", "Irritations"
                 ],
                 "Relationships": [
-                    "With kids", "With partner", "Conflicts", "Getting divorced", "Personal Boundaries", "Work Colleagues",
-                    "Parents"
+                    "With kids", "With partner", "Conflicts", "Getting divorced", "Personal Boundaries", "Work Colleagues", "Parents"
                 ],
                 "Crisis and Life worries": [
-                    "Loneliness", "Self-Esteem", "Financial crisis", "Searching the meaning of life",
-                    "Losing someone important"
+                    "Loneliness", "Self-Esteem", "Financial crisis", "Searching the meaning of life", "Losing someone important"
                 ],
                 "Personal growth and Career goals": [
                     "Procrastination", "Goals", "Lack of motivation", "Losing a job", "Searching inner peace"
@@ -81,7 +80,6 @@ def question_and_registration():
                     "surgeries", "head aches", "skin", "inner illnesses", "oncology"
                 ]
             }
-
             category_counts = {
                 category: sum(1 for issue in selected_issues if issue in options)
                 for category, options in categories.items()
@@ -97,23 +95,28 @@ def question_and_registration():
             email = request.form.get('email')
             password = request.form.get('password')
 
-            # Валидации
+            # Валидация пароля и email
             if not is_valid_password(password):
-                raise ValueError("Password must be at least 8 characters long and contain both letters and numbers.")
+                session['error'] = "Password must be at least 8 characters long and contain both letters and numbers."
+                return redirect(url_for('question.question_and_registration'))
 
             if not is_email_valid(email):
-                raise ValueError("The provided email address is invalid or does not exist.")
+                session['error'] = "The provided email address is invalid or does not exist."
+                return redirect(url_for('question.question_and_registration'))
 
+            # Проверяем, существует ли уже пользователь с таким именем или email
             if User.query.filter_by(username=name).first():
-                raise ValueError("Username already exists.")
+                session['error'] = "Имя пользователя уже существует."
+                return redirect(url_for('question.question_and_registration'))
 
             if User.query.filter_by(email=email).first() or Therapist.query.filter_by(email=email).first():
-                raise ValueError("Email already exists.")
+                session['error'] = "Этот email уже существует."
+                return redirect(url_for('question.question_and_registration'))
 
             # Генерация кода подтверждения
             verification_code = generate_verification_code()
 
-            # Создание нового пользователя
+            # Создаем нового пользователя
             new_user = User(
                 first_name=first_name,
                 last_name=last_name,
@@ -123,7 +126,10 @@ def question_and_registration():
                 verification_code=verification_code
             )
 
-            # Создание категорий пользователя
+            db.session.add(new_user)
+            db.session.commit()  # Сохраняем пользователя в БД
+
+            # Добавляем категории для пользователя
             usercategories = UserCategories(
                 user_id=new_user.id,
                 category_1=top_categories[0] if len(top_categories) > 0 else None,
@@ -131,13 +137,8 @@ def question_and_registration():
                 category_3=top_categories[2] if len(top_categories) > 2 else None
             )
 
-            # Сохраняем в базу данных
-            db.session.add(new_user)
-            db.session.commit()
-
-            # Добавляем категории только после сохранения пользователя
             db.session.add(usercategories)
-            db.session.commit()
+            db.session.commit()  # Сохраняем категории
 
             # Отправляем email для подтверждения
             send_verification_emaill(email, verification_code)
@@ -145,15 +146,10 @@ def question_and_registration():
             # Перенаправляем на страницу подтверждения email
             return redirect(url_for('auth.verify_email', user_id=new_user.id))
 
-        except ValueError as ve:
-            # Валидационные ошибки
-            session['error'] = str(ve)
-            return redirect(url_for('question.question_and_registration'))
-
         except Exception as e:
-            # Общие ошибки
-            session['error'] = "An error occurred during registration. Please try again."
+            # Если произошла ошибка, откатываем изменения в БД и выводим сообщение
             db.session.rollback()  # Откатываем изменения в базе данных
+            session['error'] = "Произошла ошибка при регистрации. Пожалуйста, попробуйте снова."
             return redirect(url_for('question.question_and_registration'))
 
     # Если запрос GET, отображаем форму
