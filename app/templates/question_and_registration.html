@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration and Therapy Questionnaire</title>
+    <style>
+        /* General reset for the body */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            color: #333;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+            color: #444;
+        }
+
+        .form-container,
+        .question-container,
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .form-container h2,
+        .question-container h3,
+        .form-group label {
+            font-weight: 500;
+            color: #333;
+        }
+
+        /* Form Fields */
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        textarea:focus {
+            border-color: #3f7cfa;
+            outline: none;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .checkbox-group label {
+            font-size: 16px;
+            margin-left: 10px;
+        }
+
+        .checkbox-group div {
+            display: flex;
+            align-items: center;
+        }
+
+        .submit-btn {
+            background-color: #3f7cfa;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 18px;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #2a61b3;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .form-container,
+            .question-container,
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            .checkbox-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Registration and Therapy Questionnaire</h1>
+
+        <!-- User Registration Form -->
+        <form action="{{ url_for('question.question_and_registration') }}" method="POST" enctype="multipart/form-data">
+            <div class="form-container">
+                <h2>Register</h2>
+
+                {% if error %}
+                    <div class="error">{{ error }}</div>
+                {% endif %}
+
+                <label for="first_name">First Name:</label>
+                <input type="text" id="first_name" name="first_name" placeholder="Enter your first name" required>
+
+                <label for="last_name">Last Name:</label>
+                <input type="text" id="last_name" name="last_name" placeholder="Enter your last name" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+            </div>
+
+            <!-- Therapy Questionnaire -->
+           <div class="form-group">
+                <label>What has been worrying you recently? (you have many options)</label>
+                <div class="checkbox-group">
+                    <div>
+                        <input type="checkbox" id="panic-attack" name="issues" value="Panic attacks">
+                        <label for="panic-attack">Panic attacks</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="stress" name="issues" value="Stress">
+                        <label for="stress">Stress</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="constant-headaches" name="issues" value="Constant headaches">
+                        <label for="constant-headaches">Constant headaches</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="fears" name="issues" value="Personal Fears">
+                        <label for="fears">Personal Fears</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="phobias" name="issues" value="Phobias">
+                        <label for="phobias">Phobias</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="burnouts" name="issues" value="Burnouts">
+                        <label for="burnouts">Burnouts</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="irritations" name="issues" value="Irritations">
+                        <label for="irritations">Irritations</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Relationships section -->
+            <div class="form-group">
+                <label>Relationships</label>
+                <div class="checkbox-group">
+                    <div>
+                        <input type="checkbox" id="kids" name="issues" value="With kids">
+                        <label for="kids">With kids</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="partner" name="issues" value="With partner">
+                        <label for="partner">With partner</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="conflicts" name="issues" value="Conflicts">
+                        <label for="conflicts">Conflicts</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="divorce" name="issues" value="Getting divorced">
+                        <label for="divorce">Getting divorced</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="boundaries" name="issues" value="Personal Boundaries">
+                        <label for="boundaries">Personal Boundaries</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="colleagues" name="issues" value="Work Colleagues">
+                        <label for="colleagues">Work Colleagues</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="parents" name="issues" value="Parents">
+                        <label for="parents">Parents</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Crisis and Life worries section -->
+            <div class="form-group">
+                <label>Crisis and Life worries</label>
+                <div class="checkbox-group">
+                    <div>
+                        <input type="checkbox" id="loneliness" name="issues" value="Loneliness">
+                        <label for="loneliness">Feeling Lonely</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="self-esteem" name="issues" value="Self-Esteem">
+                        <label for="self-esteem">Self-esteem</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="finance" name="issues" value="Financial crisis">
+                        <label for="finance">Financial crisis</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="reasoning" name="issues" value="Searching the meaning of life">
+                        <label for="reasoning">Searching the meaning of life</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="losing" name="issues" value="Losing someone important">
+                        <label for="losing">Losing someone important</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Personal growth and Career goals section -->
+            <div class="form-group">
+                <label>Personal growth and Career goals</label>
+                <div class="checkbox-group">
+                    <div>
+                        <input type="checkbox" id="procrastination" name="issues" value="Procrastination">
+                        <label for="procrastination">Procrastination</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="goals" name="issues" value="Goals">
+                        <label for="goals">Having no goals</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="motivation" name="issues" value="Lack of motivation">
+                        <label for="motivation">Lack of motivation</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="job" name="issues" value="Losing a job">
+                        <label for="job">Losing a job</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="inner-peace" name="issues" value="Searching inner peace">
+                        <label for="inner-peace">Searching inner peace</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Addictions section -->
+            <div class="form-group">
+                <label>Addictions</label>
+                <div class="checkbox-group">
+                    <div>
+                        <input type="checkbox" id="addictive-relationships" name="issues" value="Addictive relationships">
+                        <label for="addictive-relationships">Addictive relationships</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="alcohol" name="issues" value="Alcohol">
+                        <label for="alcohol">Alcohol</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="games" name="issues" value="Gaming">
+                        <label for="games">Gaming</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="drugs" name="issues" value="Drug addiction">
+                        <label for="drugs">Drug addiction</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Perinatal psychology section -->
+            <div class="form-group">
+                <label>Perinatal psychology</label>
+                <div class="checkbox-group">
+                    <div>
+                        <input type="checkbox" id="miscarriage" name="issues" value="Miscarriage">
+                        <label for="miscarriage">Miscarriage</label>
+
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="abortion" name="issues" value="Abortion">
+                        <label for="abortion">Abortion</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="pregnancy-planning" name="issues" value="Pregnancy planning">
+                        <label for="pregnancy-planning">Pregnancy planning</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="infertility" name="issues" value="Infertility">
+                        <label for="infertility">Infertility</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="childbirth" name="issues" value="Childbirth">
+                        <label for="childbirth">Childbirth</label>
+                    </div>
+                </div>
+            </div>
+
+
+
+<!--            Psychosomatic  -->
+            <div class="form-group">
+                <label>Psychosomatics</label>
+                <div class="checkbox-group">
+                    <div>
+                        <input type="checkbox" id="surgeries" name="issues" value="surgeries">
+                        <label for="surgeries">Surgeries</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="head aches" name="issues" value="head aches">
+                        <label for="head aches">Constant head aches</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="skin" name="issues" value="skin">
+                        <label for="skin">Skin problems</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="inner illnesses" name="issues" value="inner illnesses">
+                        <label for="inner illnesses">Inner illnesses </label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="oncology" name="issues" value="oncology">
+                        <label for="oncology">Oncology</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Fields -->
+            <div class="form-group">
+                <label for="name">How can we address you?</label>
+                <input type="text" id="name" name="name" placeholder="Your Name" required oninput="checkNameAvailability()">
+                <span id="name-error" style="color: red; display: none;">This name is already taken. Please choose another one.</span>
+
+                <label for="concerns">What concerns you?</label>
+                <textarea id="concerns" name="concerns" rows="4" placeholder="Describe your concerns"></textarea>
+
+
+
+                
+            </div>
+
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </div>
+
+   <script>
+    function checkNameAvailability() {
+        const nameField = document.getElementById('name');
+        const nameError = document.getElementById('name-error');
+        const name = nameField.value.trim();
+
+        if (name.length > 0) {
+            // Send the AJAX request to check the name availability
+            fetch(`/check_name_availability?name=${name}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.isAvailable) {
+                        nameError.style.display = 'inline';
+                    } else {
+                        nameError.style.display = 'none';
+                    }
+                });
+        } else {
+            nameError.style.display = 'none';
+        }
+    }
+</script>
+
+
+</body>
+</html>

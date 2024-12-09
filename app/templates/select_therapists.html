@@ -143,6 +143,7 @@
             background-color: #f1f1f1;
         }
 
+
         .certificate-item a {
             text-decoration: none;
             color: #007bff;
@@ -180,10 +181,48 @@
                 margin-top: 15px;
             }
         }
+            .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background-color: #1E1E3C;
+    color: #FFF;
+    width: 100%
+}
+
+.navbar .logo {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+    .nav-links a {
+        text-decoration: none;
+        color: #FFFFFF;
+        font-size: 16px;
+        padding: 5px;
+        transition: background-color 0.3s;
+    }
+
+    .nav-links a:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+
     </style>
 </head>
 <body>
+ <header class="navbar">
+    <div class="logo">HelpShare</div>
+    <div class="nav-links">
+        <a href="/">Home</a>
+<a href="#" onclick="goBack()">Back</a>
 
+    </div>
+</header>
     <div class="container">
         <div class="therapist-card">
             <!-- Avatar at the top-left -->
@@ -192,19 +231,18 @@
             </div>
             <div class="therapist-info">
                 <h2>{{ therapist.first_name }} {{ therapist.last_name }}</h2>
-<p>Area of specialization:
+<p>Специализация:
     {% if profecia %}
         {% for category in profecia %}
             {{ category.category_name }}{% if not loop.last %}, {% endif %}
         {% endfor %}
     {% else %}
-       No info about specialization
+        Нет информации о специализации
     {% endif %}
-</p>                <p>Experience: 3 years</p>
-
+</p>
                 <!-- Certificates Section -->
                 <div class="certificates-section">
-                    <h3>Certificates:</h3>
+                    <h3>Сертификаты:</h3>
                     {% if therapist.certificates %}
                         {% for certificate in therapist.certificates %}
                             <div class="certificate-item">
@@ -214,19 +252,17 @@
                             </div>
                         {% endfor %}
                     {% else %}
-                        <p>No certificates</p>
+                        <p>Нет сертификатов</p>
                     {% endif %}
                 </div>
 
             </div>
-            <a href="{{ url_for('auth.book', therapist_id=therapist.id) }}" class="select-button">
-                Select
-            </a>
+
         </div>
     </div>
     <footer>
         <p style="text-align: center; color: #6c757d; font-size: 0.9rem;">
-            &copy; 2024 HelpShare.All rights preserved.
+            &copy; 2024 Ваша компания. Все права защищены.
         </p>
     </footer>
 </body>

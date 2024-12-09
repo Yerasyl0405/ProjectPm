@@ -4,19 +4,157 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Выбор времени</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .time-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .time-slot {
+            background-color: #4caf50;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 180px;
+            text-align: center;
+            transition: background-color 0.3s;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        .time-slot:hover {
+            background-color: #45a049;
+        }
+
+        .time-slot.selected {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #888;
+            font-size: 14px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .time-slot {
+                width: 100%;
+                font-size: 16px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Выберите время для психолога {{ therapist.first_name }} {{ therapist.last_name }}</h1>
-    <form method="POST">
-        <label for="time">Доступное время:</label>
-        <select name="time" id="time">
-            {% for time in available_times %}
-            <option value="{{ time }}">{{ time }}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <button type="submit">Подтвердить</button>
-    </form>
+    <div class="container">
+        <h1>Выберите время для психолога {{ therapist.first_name }} {{ therapist.last_name }}</h1>
+
+        <!-- Available Time Slots -->
+        <div class="time-container">
+    {% for time in available_times %}
+        <div class="time-slot {% if not time.is_available %}unavailable{% endif %}"
+             data-id="{{ time.id }}"
+             data-date="{{ time.date }}"
+             data-time="{{ time.time }}">
+            {{ time.date }} - {{ time.time }}
+            {% if not time.is_available %}
+                <span class="status">(Недоступно)</span>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+
+
+        <!-- Confirm Button -->
+        <form method="POST">
+            <input type="hidden" name="time" id="selected-time">
+            <button type="submit">Подтвердить</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Платформа психологов. Все права защищены.</p>
+    </footer>
+
+    <script>
+        // JavaScript to handle the time selection and disable selected times
+        document.querySelectorAll('.time-slot').forEach(slot => {
+            slot.addEventListener('click', function() {
+                const selectedSlot = this;
+                const selectedTimeId = selectedSlot.getAttribute('data-id');
+                const selectedDateTime = selectedSlot.getAttribute('data-date') + ' ' + selectedSlot.getAttribute('data-time');
+
+                // Mark this slot as selected
+                selectedSlot.classList.add('selected');
+                selectedSlot.style.pointerEvents = 'none';  // Disable further clicks on the selected slot
+
+                // Set the selected time in the hidden input field for form submission
+                document.getElementById('selected-time').value = selectedTimeId;
+
+                // Optionally, disable all other time slots that are already selected
+                document.querySelectorAll('.time-slot').forEach(otherSlot => {
+                    if (otherSlot !== selectedSlot && otherSlot.getAttribute('data-id') === selectedTimeId) {
+                        otherSlot.classList.add('selected');
+                        otherSlot.style.pointerEvents = 'none';
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
-

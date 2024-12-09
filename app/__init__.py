@@ -12,6 +12,10 @@ mail = Mail()
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+    app.config['UPLOAD_FOLDER'] = 'static/uploads/'
+    app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
+    app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB max size for uploads
+
     db.init_app(app)
     bcrypt.init_app(app)
 

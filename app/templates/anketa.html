@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionnaire</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .questionnaire-container {
+            width: 60%;
+            margin: 50px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .question-section {
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .options {
+            margin-left: 20px;
+        }
+
+        .options label {
+            margin-right: 20px;
+        }
+
+        input[type="radio"], input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #1E1E3C;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #B0B0B0;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="questionnaire-container">
+        <h1>Customer Feedback</h1>
+        <form method="POST" action="submit_form.php">
+
+            <!-- Question 1 -->
+            <div class="question-section">
+                <p class="question">How satisfied are you with our service?</p>
+                <div class="options">
+                    <label><input type="radio" name="satisfaction" value="Very Satisfied"> Very Satisfied</label>
+                    <label><input type="radio" name="satisfaction" value="Satisfied"> Satisfied</label>
+                    <label><input type="radio" name="satisfaction" value="Neutral"> Neutral</label>
+                    <label><input type="radio" name="satisfaction" value="Dissatisfied"> Dissatisfied</label>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-section">
+                <p class="question">Would you recommend our service to others?</p>
+                <div class="options">
+                    <label><input type="radio" name="recommend" value="Yes"> Yes</label>
+                    <label><input type="radio" name="recommend" value="No"> No</label>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-section">
+                <p class="question">What features would you like to see in future services? (Check all that apply)</p>
+                <div class="options">
+                    <label><input type="checkbox" name="features" value="Live Chat"> Live Chat</label>
+                    <label><input type="checkbox" name="features" value="Mobile App"> Mobile App</label>
+                    <label><input type="checkbox" name="features" value="24/7 Support"> 24/7 Support</label>
+                    <label><input type="checkbox" name="features" value="Custom Reports"> Custom Reports</label>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-section">
+                <p class="question">Additional comments or suggestions:</p>
+                <textarea name="comments" rows="4" cols="50"></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

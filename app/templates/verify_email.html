@@ -63,9 +63,9 @@
             <label for="verification_code">Verification Code:</label>
             <input type="text" id="verification_code" name="verification_code" placeholder="Enter the verification code" required>
 
-            {% if error %}
-            <div class="error">{{ error }}</div>
-            {% endif %}
+          {% if error_message %}
+        <p style="color: red;">{{ error_message }}</p>
+    {% endif %}
 
             <button type="submit">Verify</button>
         </form>

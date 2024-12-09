@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommendations</title>
+</head>
+<body>
+    <h1>Therapist Recommendations for {{ user.first_name }} {{ user.last_name }}</h1>
+
+    {% if recommended_therapists %}
+        <ul>
+        {% for therapist in recommended_therapists %}
+            <li>
+                <p>{{ therapist.first_name }} {{ therapist.last_name }} - Specialty: {{ therapist.specialty }}</p>
+                <p>Email: {{ therapist.email }}</p>
+                <p>Certificate: {{ therapist.certificate_path }}</p>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No recommendations available at this time.</p>
+    {% endif %}
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatGPT Web Page</title>
+    <title>Chat with AI Therapist</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,71 +11,76 @@
         }
         #chat-box {
             width: 100%;
-            height: 300px;
-            border: 1px solid #ccc;
+            max-width: 600px;
+            margin: auto;
+            border: 1px solid #ddd;
             padding: 10px;
-            overflow-y: auto;
-            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
         }
-        #input-box {
-            display: flex;
-            gap: 10px;
+        .message {
+            margin: 10px 0;
         }
-        #input-box input {
-            flex: 1;
-            padding: 10px;
+        .message.user {
+            text-align: right;
+            color: blue;
         }
-        #input-box button {
-            padding: 10px;
+        .message.ai {
+            text-align: left;
+            color: green;
         }
     </style>
 </head>
 <body>
-    <h1>Chat with GPT</h1>
+    <h1>Chat with AI Therapist</h1>
     <div id="chat-box"></div>
-    <div id="input-box">
-        <input type="text" id="user-input" placeholder="Type your message here">
-        <button onclick="sendMessage()">Send</button>
-    </div>
+    <input type="text" id="user-message" placeholder="Type your message here..." style="width: 100%; max-width: 600px;">
+    <button id="send-button">Send</button>
 
     <script>
         const chatBox = document.getElementById('chat-box');
-        const userInput = document.getElementById('user-input');
+        const userMessageInput = document.getElementById('user-message');
+        const sendButton = document.getElementById('send-button');
 
-        async function sendMessage() {
-            const message = userInput.value;
-            if (!message) return;
+        sendButton.addEventListener('click', async () => {
+            const userMessage = userMessageInput.value.trim();
+            if (!userMessage) return;
 
-            // Отображаем сообщение пользователя
-            appendMessage('User', message);
-            userInput.value = '';
+            // Показать сообщение пользователя
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.className = 'message user';
+            userMessageDiv.textContent = userMessage;
+            chatBox.appendChild(userMessageDiv);
+
+            // Очистить ввод
+            userMessageInput.value = '';
 
             try {
+                // Отправка запроса к Flask API
                 const response = await fetch('/chat', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ message }),
+                    body: JSON.stringify({ message: userMessage }),
                 });
 
                 const data = await response.json();
-                if (data.reply) {
-                    appendMessage('GPT', data.reply);
-                } else {
-    appendMessage('Error', `Error: ${data.error}. Details: ${JSON.stringify(data.details || {})}`);
-                }
-            } catch (error) {
-    appendMessage('Error', `Error: ${data.error}. Details: ${JSON.stringify(data.details || {})}`);
-            }
-        }
 
-        function appendMessage(sender, message) {
-            const messageElement = document.createElement('div');
-            messageElement.textContent = `${sender}: ${message}`;
-            chatBox.appendChild(messageElement);
-            chatBox.scrollTop = chatBox.scrollHeight; // Прокручиваем вниз
-        }
+                // Показать ответ ИИ
+                const aiMessageDiv = document.createElement('div');
+                aiMessageDiv.className = 'message ai';
+                aiMessageDiv.textContent = data.response || 'Error: No response';
+                chatBox.appendChild(aiMessageDiv);
+
+            } catch (error) {
+                console.error('Error:', error);
+                const errorMessageDiv = document.createElement('div');
+                errorMessageDiv.className = 'message ai';
+                errorMessageDiv.textContent = 'An error occurred. Please try again.';
+                chatBox.appendChild(errorMessageDiv);
+            }
+        });
     </script>
 </body>
 </html>

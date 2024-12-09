@@ -4,134 +4,145 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Therapist Sign-In</title>
-  <style>
-    /* Общие стили */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Roboto', sans-serif;
-    }
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
-    body {
-    display: flex;
+  <style>
+   * General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body */
+body {
+  font-family: 'Playfair', sans-serif;
+  background-color: #fafafa;
+  color: #333;
+  line-height: 1.6;
+}
+h1, h2, h3 {
+  font-family: 'Roboto', sans-serif; /* Apply to headings */
+}
+
+p {
+  font-family: 'Georgia', serif; /* Apply a different font to paragraphs */
+}
+
+/* Background Section */
+.background {
+  background-image: url('background-image.jpg'); /* Use an appropriate background image */
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: #f9f9f9;
-    }
+}
 
-    .signin-container {
-      width: 400px;
-  padding: 20px;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+/* Form Container */
+.form-container {
+  background-color: rgba(255, 255, 255, 0.9); /* White background with slight opacity */
+  border-radius: 12px;
+  padding: 40px;
+  width: 100%;
+  max-width: 500px; /* Limit the form width */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   text-align: center;
-    }
+}
 
-    h1 {
-font-size: 24px;
-  color: #2a4d8f;
-  margin-bottom: 20px;
-    }
-
-    .signin-form {
-     display: flex;
-  flex-direction: column;
-  gap: 15px;
-    }
-
-    label {
-      display: block;
-  font-size: 14px;
-  margin-bottom: 5px;
+/* Heading */
+h1 {
+  font-size: 28px;
+  font-weight: bold;
   color: #333;
-    text-align: left;
+  margin-bottom: 30px;
+  font-family: 'Playfair', sans-serif;
+}
 
-    }
-
-    input {
-     width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-    }
-
-    input:focus {
-     border-color: #2a4d8f;
-  outline: none;
-    }
-
-    input::placeholder {
-      color: #B5B5B5;
-      font-style: italic;
-    }
-
-    button {
-   background-color: #4caf50;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 4px;
+/* Form Labels */
+label {
   font-size: 16px;
+  font-weight: 500;
+  color: #2a2a2a;
+  display: block;
+  text-align: left;
+  margin-bottom: 8px;
+}
+
+/* Form Inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  color: #333;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: #2b8a3e; /* Green focus border */
+}
+
+/* Button */
+button {
+  background-color: #29274C; /* Green background for the button */
+  color: #fff;
+  font-size: 16px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s;
-    }
+  transition: background-color 0.3s ease;
+  width: 100%; /* Full width */
+}
 
-    button:hover {
-       background-color: #45a049;
+button:hover {
+  background-color: #978E87; /* Darker green on hover */
+}
 
-    }
+/* Responsive Design */
+@media (max-width: 768px) {
+  .form-container {
+    padding: 30px;
+    width: 90%; /* Form will take up 90% of the screen on smaller devices */
+  }
 
-    .signup-link {
-      margin-top: 10px;
-  font-size: 14px;
-  color: #666;
-    }
-
-    .signup-link a {
-    color: #2a4d8f;
-  text-decoration: none;
-    }
-
-    .signup-link a:hover {
-       text-decoration: underline;
-
-    }
-
-    @media (max-width: 480px) {
-      .signin-container {
-        padding: 30px 20px;
-      }
-
-      h1 {
-        font-size: 26px;
-      }
-
-      input, button {
-        font-size: 14px;
-        padding: 10px;
-      }
-    }
+  h1 {
+    font-size: 24px;
+  }
+}
   </style>
 </head>
 <body>
-  <div class="signin-container">
-    <h1>Therapist Sign-In</h1>
+   <div class="background">
+        <div class="form-container">
+            <h1>Welcome back !</h1>
     <form action="/login" method="POST" class="signin-form">
+         {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
       <label for="email">Email</label>
       <input type="email" id="email" name="email" placeholder="Enter your email" required>
 
       <label for="password">Password</label>
       <input type="password" id="password" name="password" placeholder="Enter your password" required>
 
-      <button type="submit">Sign In</button>
+                <button type="submit">Sign in !</button>
     </form>
     <p class="signup-link">
-      Don't have an account? <a href="{{ url_for('auth.register') }}">Sign Up Here</a>
+      Are you therapist ? <a href="{{ url_for('auth.register') }}">Sign Up Here</a>
     </p>
   </div>
 </body>
 </html>
+
+
+
+

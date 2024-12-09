@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.first_name }} {{ user.last_name }} - User Profile</title>
+    <style>
+        /* Overlay for chat */
+.chat-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Chat container stays the same */
+.chat-container {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    width: 350px;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+        .chat-header {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px;
+        text-align: center;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .chat-messages {
+        flex: 1;
+        padding: 10px;
+        overflow-y: auto;
+        background-color: #f9f9f9;
+    }
+
+    .chat-messages .message {
+        margin: 5px 0;
+        padding: 10px;
+        border-radius: 8px;
+        max-width: 80%;
+    }
+
+    .chat-messages .message.user {
+        background-color: #e0ffe0;
+        margin-left: auto;
+    }
+
+    .chat-messages .message.ai {
+        background-color: #e6f3ff;
+    }
+
+    .chat-input {
+        display: flex;
+        padding: 10px;
+        gap: 10px;
+        border-top: 1px solid #ddd;
+        background-color: #fff;
+    }
+
+    .chat-input input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .chat-input button {
+        padding: 10px 15px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fb;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        header {
+            background-color: #333;
+            padding: 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .therapists-link, .logout-btn, .profile-btn {
+            background-color: #4caf50;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .therapists-link:hover, .logout-btn:hover, .profile-btn:hover {
+            background-color: #909294;
+        }
+
+        .logout-btn {
+            background-color: #ff6b6b;
+        }
+
+        .logout-btn:hover {
+            background-color: #e64c4c;
+        }
+.therapist-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            align-items:center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+        }
+
+        .therapist-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Метка языка */
+        .language-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #333;
+            color: #fff;
+            font-size: 12px;
+            padding: 5px 10px;
+            border-radius: 15px;
+        }
+
+        /* Цена */
+        .price {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #007bff;
+        }
+
+        /* Профиль */
+        .profile {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        /* Кнопка "Подробнее" */
+        .button-detail {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 14px;
+            color: #fff;
+            background-color: #f5cc4e;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+        .profile-btn{
+        background-color: #939597
+        }
+
+        .button-detail:hover {
+            background-color: #e5b72e;
+        }
+        /* Profile Sidebar */
+        .profile-container {
+            position: fixed;
+            top: 80px; /* Below the header */
+            left: 0;
+            width: 300px;
+            height: calc(100vh - 80px);
+            background-color: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: none;
+            z-index: 100;
+            overflow-y: auto;
+        }
+
+        .profile-container.active {
+            display: block;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .avatar-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ddd;
+        }
+
+        h1 {
+            font-size: 22px;
+            margin: 0;
+            font-weight: 600;
+        }
+        .therapists-link{
+        background-color: #939597
+        }
+
+        .profile-info h2 {
+            margin-top: 20px;
+            color: #555;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .profile-info p {
+            margin: 8px 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        /* Main Content */
+        .container {
+            margin-left: 20px; /* Leave space for profile sidebar */
+            padding: 20px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .profile-container {
+                width: 100%;
+                height: auto;
+                position: fixed;
+                top: 80px;
+                left: 0;
+                padding: 15px;
+            }
+
+            .container {
+                margin-left: 0;
+                padding: 15px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-title">User Platform</div>
+        <div>
+            <button class="profile-btn" onclick="toggleBookings()">Bookings</button>
+
+                    <button onclick="backToDefaultContent()" class="profile-btn">Home</button>
+
+            <button  class="profile-btn" onclick="toggleChat()" class="therapists-link">Chat with AI</button>
+
+            <button class="profile-btn" onclick="toggleProfile()">Profile</button>
+               <a href="#" onclick="loadContent('/therapists')" class="therapists-link">Therapists</a>
+            <a href="#" onclick="loadContent('/blocks')" class="therapists-link">Vlog</a>
+            <a href="{{ url_for('main.main') }}" class="logout-btn">Logout</a>
+        </div>
+    </header>
+
+    <!-- Profile Sidebar -->
+    <div id="profile-container" class="profile-container">
+        <div class="profile-header">
+            {% if user.avatar %}
+                <img src="{{ url_for('auth.get_avatar', id=user.id) }}" alt="Avatar" class="avatar-preview">
+            {% else %}
+                <img src="{{ url_for('static', filename='default-avatar.png') }}" alt="Default Avatar" class="avatar-preview">
+            {% endif %}
+            <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+        </div>
+
+        <section class="profile-info">
+            <h2>About {{ user.first_name }}</h2>
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Birthday:</strong> {{ user.birthday.strftime('%B %d, %Y') if user.birthday else 'N/A' }}</p>
+            <p><strong>Email Verified:</strong> {{ 'Yes' if user.email_verified else 'No' }}</p>
+            <a href="{{ url_for('auth.edit_user_profile', id=user.id) }}" class="button">Edit Profile</a>
+        </section>
+    </div>
+ <div id="main-content" class="container">
+    <!-- Default content displayed when no dynamic content is loaded -->
+    <div id="default-content">
+        <h2>Therapist Recommendations</h2>
+        <p>Based on your interests and needs, here are some therapist recommendations for you:</p>
+
+        <!-- Placeholder for therapist recommendations -->
+        <div id="recommendations-list">
+            {% if recommended_therapists %}
+                <ul>
+                    {% for therapist in recommended_therapists %}
+   {% for therapist in therapists %}
+           <div class="therapist-card">
+        <div class="language-badge">ENG</div>
+        <h2 class="therapist-name"> {{ therapist.first_name }} {{ therapist.last_name }}</h2>
+        <p class="price">19000 ₸ / 1 hour</p>
+        <div class="button-container">
+                <a href="{{ url_for('auth.view_therapist', id=therapist.id) }}" class="button-detail">Подробнее</a>
+            <!-- Webex link button below Learn More button -->
+        </div>
+    </div>
+        {% endfor %}                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No recommendations available based on your selected categories.</p>
+            {% endif %}
+        </div>
+    </div>
+    {% block content %}
+    {% endblock %}
+</div>
+
+    <div id="bookings-container" class="profile-container">
+    <h2>Your Bookings</h2>
+    <div id="bookings-list">
+        {% if user_bookings %}
+            <ul>
+                {% for booking in user_bookings %}
+                    <li>
+                        <div class="therapist-card">
+                            <h3>Therapist: {{ booking.therapist.first_name }} {{ booking.therapist.last_name }}</h3>
+                            <p><strong>Email:</strong> {{ booking.therapist.email }}</p>
+                            <p><strong>Time:</strong> {{ booking.time }}</p>
+                            <a href="https://webex.com/meeting/amelia-clark" class="webex-link" target="_blank">Join Webex</a>
+
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No bookings available.</p>
+        {% endif %}
+    </div>
+</div>
+
+    <!-- Main Content -->
+   <div id="chat-overlay" class="chat-overlay" style="display: none;">
+    <div class="chat-container">
+        <div class="chat-header">
+            Chat with AI Therapist
+            <button onclick="toggleChat()" style="float: right; background: none; border: none; color: white; cursor: pointer;">✖</button>
+        </div>
+        <div id="chat-box" class="chat-messages"></div>
+        <div class="chat-input">
+            <input type="text" id="user-message" placeholder="Type your message here...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+</div>
+
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const userMessageInput = document.getElementById('user-message');
+        const sendButton = document.getElementById('send-button');
+
+        sendButton.addEventListener('click', async () => {
+            const userMessage = userMessageInput.value.trim();
+            if (!userMessage) return;
+
+            // Показать сообщение пользователя
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.className = 'message user';
+            userMessageDiv.textContent = userMessage;
+            chatBox.appendChild(userMessageDiv);
+
+            // Очистить ввод
+            userMessageInput.value = '';
+
+            try {
+                // Отправка запроса к Flask API
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: userMessage }),
+                });
+
+                const data = await response.json();
+
+                // Показать ответ ИИ
+                const aiMessageDiv = document.createElement('div');
+                aiMessageDiv.className = 'message ai';
+                aiMessageDiv.textContent = data.response || 'Error: No response';
+                chatBox.appendChild(aiMessageDiv);
+
+            } catch (error) {
+                console.error('Error:', error);
+                const errorMessageDiv = document.createElement('div');
+                errorMessageDiv.className = 'message ai';
+                errorMessageDiv.textContent = 'An error occurred. Please try again.';
+                chatBox.appendChild(errorMessageDiv);
+            }
+        });
+    </script>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 User Platform. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to load content dynamically
+       function loadContent(url) {
+    fetch(url)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('main-content').innerHTML = html;
+        })
+        .catch(error => console.error('Error loading content:', error));
+}
+
+        function toggleProfile() {
+            const profileContainer = document.getElementById('profile-container');
+            profileContainer.classList.toggle('active');
+        }
+        function toggleChat() {
+    const chatOverlay = document.getElementById('chat-overlay');
+    if (chatOverlay.style.display === 'none' || chatOverlay.style.display === '') {
+        chatOverlay.style.display = 'flex'; // Show the chat overlay
+    } else {
+        chatOverlay.style.display = 'none'; // Hide the chat overlay
+    }
+}
+
+        function backToDefaultContent() {
+    // Reset the main content to the default recommendation content
+    document.getElementById('main-content').innerHTML = `
+        <div id="default-content">
+            <h2>Therapist Recommendations</h2>
+            <p>Based on your interests and needs, here are some therapist recommendations for you:</p>
+            <div id="recommendations-list">
+                {% if recommended_therapists %}
+                    <ul>
+                        {% for therapist in recommended_therapists %}
+                            <div class="therapist-card">
+                                <div class="language-badge">ENG</div>
+                                <h2 class="therapist-name">{{ therapist.first_name }} {{ therapist.last_name }}</h2>
+                                <p class="price">19000 ₸ / 1 hour</p>
+
+                                <div class="button-container">
+                                    <a href="{{ url_for('auth.user_view_therapist', id=therapist.id) }}" class="button-detail">Подробнее</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No recommendations available based on your selected categories.</p>
+                {% endif %}
+            </div>
+        </div>
+    `;
+}
+
+    </script>
+</body>
+</html>
+<script>
+(function() {
+  var ws = new WebSocket('ws://' + window.location.host +
+             '/jb-server-page?reloadMode=RELOAD_ON_SAVE&'+
+             'referrer=' + encodeURIComponent(window.location.pathname));
+  ws.onmessage = function (msg) {
+      if (msg.data === 'reload') {
+          window.location.reload();
+      }
+      if (msg.data.startsWith('update-css ')) {
+          var messageId = msg.data.substring(11);
+          var links = document.getElementsByTagName('link');
+          for (var i = 0; i < links.length; i++) {
+              var link = links[i];
+              if (link.rel !== 'stylesheet') continue;
+              var clonedLink = link.cloneNode(true);
+              var newHref = link.href.replace(/(&|\?)jbUpdateLinksId=\d+/, "$1jbUpdateLinksId=" + messageId);
+              if (newHref !== link.href) {
+                clonedLink.href = newHref;
+              }
+              else {
+                var indexOfQuest = newHref.indexOf('?');
+                if (indexOfQuest >= 0) {
+                  // to support ?foo#hash
+                  clonedLink.href = newHref.substring(0, indexOfQuest + 1) + 'jbUpdateLinksId=' + messageId + '&' +
+                                    newHref.substring(indexOfQuest + 1);
+                }
+                else {
+                  clonedLink.href += '?' + 'jbUpdateLinksId=' + messageId;
+                }
+              }
+              link.replaceWith(clonedLink);
+          }
+      }
+  };
+})();
+</script>
+<script>
+    // Load default content when the page loads
+    window.onload = function() {
+        backToDefaultContent();
+    };
+    function toggleBookings() {
+    const bookingsContainer = document.getElementById('bookings-container');
+    bookingsContainer.classList.toggle('active');
+}
+</script>

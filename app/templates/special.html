@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+          .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 40px;
+        background-color: #1E1E3C;
+        color: #FFF;
+        width: 100%
+    }
+
+    .navbar .logo {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 20px;
+    }
+
+    .nav-links a {
+        text-decoration: none;
+        color: #FFFFFF;
+        font-size: 16px;
+        padding: 5px;
+        transition: background-color 0.3s;
+    }
+
+    .nav-links a:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 5px;
+    }
+
+.get-started-btn {
+    background-color: #272E54;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 5px;
+    padding: 9px 45px;
+    cursor: pointer;
+}
+
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 500;
+            margin-bottom: 40px;
+            color: #222;
+        }
+
+        /* Контейнер с карточками */
+        .therapists-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        /* Карточка терапевта */
+        .therapist-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            align-items:center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+        }
+
+        .therapist-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Метка языка */
+        .language-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #333;
+            color: #fff;
+            font-size: 12px;
+            padding: 5px 10px;
+            border-radius: 15px;
+        }
+
+        /* Цена */
+        .price {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #007bff;
+        }
+
+        /* Профиль */
+        .profile {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        /* Кнопка "Подробнее" */
+        .button-detail {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 14px;
+            color: #fff;
+            background-color: #f5cc4e;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .button-detail:hover {
+            background-color: #e5b72e;
+        }
+
+        /* Style for button-container to align buttons vertically */
+.button-container {
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    align-items: center; /* Center buttons horizontally */
+    margin-top: 10px; /* Optional: adjust margin for spacing */
+}
+.video-container {
+    display: inline-block;
+    margin: 10px;
+}
+
+.video-container iframe {
+    max-width: 100%;
+    height: 315px; /* Fixed height for uniformity */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Flexbox for horizontal layout */
+.video_section {
+    display: flex;
+    justify-content: center; /* Centers the videos horizontally */
+    align-items: center;
+    gap: 20px; /* Spacing between the videos */
+    flex-wrap: wrap; /* Ensures videos wrap on smaller screens */
+}
+
+@media (max-width: 768px) {
+    .video-container iframe {
+        height: 200px; /* Smaller height on mobile devices */
+    }
+}
+
+
+/* Style for the Webex link button */
+.webex-link {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #00B1B1; /* Webex-like color */
+    border: none;
+    border-radius: 5px;
+    text-decoration: none; /* Remove underline */
+    text-align: center;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.webex-link:hover {
+    background-color: #008C8C; /* Darker shade on hover */
+}
+
+/* Style for the Learn More button */
+.button-detail {
+    padding: 10px 20px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #f5cc4e;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.button-detail:hover {
+    background-color: #e5b72e;
+}
+
+        /* Адаптивность */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 28px;
+            }
+
+            .therapist-card {
+                padding: 15px;
+            }
+
+            .button-detail {
+                font-size: 12px;
+                padding: 8px 15px;
+            }
+        }
+
+        .video_section {
+    text-align: center;
+    padding: 20px;
+}
+
+.video-container {
+    display: inline-block;
+    margin: 10px;
+}
+
+.video-container iframe {
+    max-width: 100%;
+    height: 315px; /* Fixed height for uniformity */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Flexbox for horizontal layout */
+.video_section {
+    display: flex;
+    justify-content: center; /* Centers the videos horizontally */
+    align-items: center;
+    gap: 20px; /* Spacing between the videos */
+    flex-wrap: wrap; /* Ensures videos wrap on smaller screens */
+}
+
+@media (max-width: 768px) {
+    .video-container iframe {
+        height: 200px; /* Smaller height on mobile devices */
+    }
+}
+    </style>
+</head>
+<body>
+<header class="navbar">
+    <div class="logo">HelpShare</div>
+    <div class="nav-links">
+        <a href="/">Home</a>
+<a href="#" onclick="goBack()">Back</a>
+
+    </div>
+</header>
+<h1>Our experts</h1>
+
+<div class="therapist-container">
+        {% for therapist in therapists %}
+           <div class="therapist-card">
+        <div class="language-badge">ENG</div>
+        <h2 class="therapist-name"> {{ therapist.first_name }} {{ therapist.last_name }}</h2>
+        <p class="price">19000 ₸ / 1 hour</p>
+        <div class="button-container">
+                <a href="{{ url_for('auth.view_therapist', id=therapist.id) }}" class="button-detail">Подробнее</a>
+            <!-- Webex link button below Learn More button -->
+            <a href="https://webex.com/meeting/amelia-clark" class="webex-link" target="_blank">Join Webex</a>
+        </div>
+    </div>
+        {% endfor %}
+    </div>
+
+
+<h1>
+
+
+
+</h1>
+ <h2>Recommended Videos</h2>
+
+<section>
+
+    <div class="video_section">
+
+
+        <!-- Embed YouTube Videos -->
+        <div class="video-container">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID_1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-container">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID_2" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-container">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID_3" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+</section>
+
+
+    <script>
+        // Function to go back to the previous page
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+

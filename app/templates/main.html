@@ -4,65 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HelpShare</title>
-    <style>/* styles.css */
-/* styles.css */
+    <link rel="stylesheet" href="welcome_page.css">
+    <style>
+      /* styles.css */
 
-about_body {
-  font-family: Arial, sans-serif;
-  color: #333;
-  line-height: 1.6;
-  background-color: #fff;
-  padding: 20px;
-}
-
-.learn-more-section {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.about-header h1 {
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
-}
-
-.about_main-heading {
-  text-align: center;
-  font-size: 32px;
-  font-weight: bold;
-  color: #2a2a2a;
-  margin: 20px 0;
-}
-
-.about-content {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-}
-
-.about-section {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.about-section.reverse {
-  flex-direction: row-reverse;
-}
-
-.about-section p {
-  flex: 1;
-  font-size: 16px;
-  color: #333;
-}
-
-.about-image {
-  width: 50%;
-  border-radius: 8px;
-  object-fit: cover;
-}
-
+/* Slide-In from Left */
+/* Bounce Animation */
+/* Base Style for the Image */
 
 .navbar {
     display: flex;
@@ -71,11 +19,14 @@ about_body {
     padding: 15px 40px;
     background-color: #1E1E3C;
     color: #FFF;
+    width: 97%
+
 }
 
 .header-links{
     display: flex;
     gap: 16px;
+
 }
 
 .logo {
@@ -113,8 +64,62 @@ about_body {
     color: #FFFFFF;
     border: none;
     border-radius: 5px;
-    padding: 8px 15px;
+    padding: 9px 45px;
     cursor: pointer;
+}
+
+/* Make the Find a Therapist button bigger */
+/* Light purple button */
+
+/* Container for the buttons */
+.button-container {
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    align-items: center; /* Center buttons horizontally */
+    gap: 10px; /* Space between buttons */
+}
+
+/* Primary button (yellow with bold text) */
+.primary-btn {
+    background-color: #1E1E3C; /* Light yellow */
+    color: white; /* Dark text color */
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 25px; /* Rounded corners */
+    display: inline-block;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    width: 250px; /* Set the button's width */
+}
+
+/* Optional: Adjust for hover */
+.primary-btn:hover {
+    background-color: #e8d773; /* Slightly darker yellow on hover */
+}
+
+/* Secondary button (lighter gray text) */
+.secondary-btn {
+    color: #888888; /* Gray text */
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: normal;
+    display: inline-block;
+    text-align: center;
+    transition: color 0.3s ease;
+}
+
+.secondary-btn:hover {
+    color: #666666; /* Darker gray on hover */
+}
+
+
+
+
+/* Hover effect: grey color */
+.sign_up-btn:hover {
+    background-color: #B0B0B0; /* Grey color on hover */
 }
 
 .hero-section {
@@ -142,7 +147,7 @@ about_body {
 
 .hero-text p {
     font-size: 24px;
-    color: #DADADA;
+    color:#666666;
 }
 
 .hero-image img {
@@ -150,63 +155,320 @@ about_body {
     height: auto;
     padding-right: 200px
 }
-</style>
+
+/* for about us css 8/
+/* Main Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header Section */
+.about-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.about-header h1 {
+  font-size: 36px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Statistics Section */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Adjusts to screen size */
+  gap: 20px;
+  margin: 40px 0;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.stat-item {
+  text-align: center;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.stat-item h3 {
+  font-size: 28px;
+  color: #2a2a2a;
+  margin-bottom: 10px;
+}
+
+.stat-item p {
+  font-size: 16px;
+  color: #555;
+}
+
+/* Features Section */
+.features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin: 40px 0;
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.feature-card {
+  text-align: center;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  width: calc(33.333% - 20px); /* Three columns with gap */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.feature-card img {
+  width: 100px; /* Slightly larger images */
+  height: auto;
+  margin-bottom: 15px;
+}
+
+.feature-card h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #2a2a2a;
+}
+
+.feature-card p {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.4;
+}
+
+/* Services Section */
+.services {
+  display: flex;
+  flex-direction: column; /* Stack cards vertically */
+  gap: 20px;
+  margin: 40px 0;
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.service-card {
+  display: flex;
+  align-items: center; /* Center-align items vertically */
+  justify-content: space-between; /* Space between text and image */
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  width: 100%; /* Full width */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.service-text {
+  flex: 1; /* Make text container flexible */
+  padding-right: 20px; /* Add space between text and image */
+}
+
+
+
+.service-card img {
+  width: 40%; /* Make the image take 40% of the width */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 8px; /* Optional: rounded corners for image */
+  object-fit: cover; /* Ensure image fits nicely */
+}
+
+/* Responsive Design for Smaller Screens */
+@media (max-width: 768px) {
+  .service-card {
+    flex-direction: column; /* Stack image below text on smaller screens */
+    align-items: center;
+  }
+
+  .service-card img {
+    width: 100%; /* Full width for smaller screens */
+    margin-top: 20px; /* Add space above the image */
+  }
+
+  .service-text {
+    padding-right: 0; /* Remove padding on smaller screens */
+  }
+}
+
+
+.service-card .service-text h1 {
+    font-size: 36px; /* Adjust to the desired font size */
+    font-weight: bold; /* Optional: Make the heading bold */
+    color: #333; /* Optional: Change text color */
+    margin-bottom: 15px; /* Optional: Add spacing below the heading */
+}
+
+@media (max-width: 480px) {
+  .feature-card,
+  .service-card {
+    width: 100%; /* Full width for feature and service cards on very small screens */
+  }
+
+  .about-header h1 {
+    font-size: 24px; /* Smaller header font size */
+  }
+}
+
+
+    </style>
 </head>
 <body>
-
-    <!-- Header -->
-    <body class="about-body">
     <header class="navbar">
         <div class="logo">HelpShare</div>
-        <nav class="nav-links">
-<a href="#learn-more-section" class="about_btn" aria-label="Learn More about HelpShare">About</a>
-            <a href="#">Newsstand</a>
-            <a href="/therapists">Therapists</a>
-        </nav>
+        <div class="header-links">
+            <nav class="nav-links">
+                <a href="#learn-more-section" class="about_btn" aria-label="Learn More about HelpShare">About</a>
+                <a href="/special">Therapists</a>
+            </nav>
         <div class="nav-buttons">
-<button onclick="window.location.href='/login';" class="get-started-btn">Log in</button>
-            <button class="get-started-btn">Get Started</button>
+            <button onclick="window.location.href='/login';" class="get-started-btn">Log in</button>
+            <button onclick="window.location.href='/question_and_registration';" class="get-started-btn">Get Started</button>
+        </div>
         </div>
     </header>
     <main class="hero-section">
         <div class="hero-text">
             <h1>Welcome to HelpShare</h1>
             <p>A place to Share and Heal</p>
+            <p> By choosing our environment you will be assured to find the best quality therapist according to your personal problems</p>
+            <!-- Find a therapist button -->
+                <div class="button-container">
+    <a href="/question_and_registration" class="primary-btn">Find a therapist →</a>
+    <a href="{{ url_for('auth.register') }}" class="secondary-btn">offer help as a therapist →</a>
+</div>
+
+
         </div>
         <div class="hero-image">
             <!-- Replace the src with the path to your illustration -->
-<img src="{{ url_for('static', filename='images/img_1.png') }}" alt="Image">
+                  <img src="{{ url_for('static', filename='images/img_1.png') }}" alt="Image">
         </div>
     </main>
-</body >
-    <!-- Learn More Block (This is part of the same page, it will just scroll into view) -->
-<div id="learn-more-section" class="learn-more-section">
-    <header class="about-header">
-      <h1>HelpShare</h1>
-    </header>
-    <main>
-      <h2 class="about -main-heading">You deserve to be happy!</h2>
-      <div class="about-content">
-        <div class="about-section">
-          <p>At HelpShare, our mission is to connect you with the right therapist who understands your unique challenges and provides tailored support. Whether you're dealing with anxiety, stress, relationship issues, or seeking personal growth, we are committed to helping you find a professional who fits your needs, preferences, and goals. Our platform ensures a seamless and compassionate approach to matching you with therapists who truly care about your well-being</p>
-          <img src="{{ url_for('static', filename='images/img.png') }}" alt="Therapist with a client" class="about-image">
-        </div>
-        <div class="about-section reverse">
-          <img src="{{ url_for('static', filename='images/img_2.png') }}" alt="Therapy session" class="about-image">
-          <p>At HelpShare, we believe that everyone deserves access to compassionate and professional care. Our goal is to guide you in finding a therapist who aligns with your personal needs and preferences, ensuring you feel understood and supported every step of the way. Whether you're navigating life’s challenges, working through emotional struggles, or simply seeking clarity and growth, our platform is here to connect you with trusted professionals dedicated to helping you achieve balance, healing, and happiness. Your journey toward a better you starts here</p>
-        </div>
-      </div>
-    </main>
-  </div>
+</body>
+<body>
+    <div id="learn-more-section" class="learn-more-section">
 
-    <script>
-        // JavaScript to scroll to the Learn More section smoothly
-        function scrollToLearnMore() {
-            const learnMoreSection = document.getElementById('learn-more-section');
+        <div class="about_container">
+            <!-- Main Heading -->
+            <header class="about-header">
+              <h1>HelpShare — A Place to Heal</h1>
+            </header>
 
-            // Scroll smoothly to the Learn More section
-            learnMoreSection.scrollIntoView({ behavior: 'smooth' });
-        }
+            <!-- Statistics Section -->
+            <section class="stats">
+              <div class="stat-item">
+                <h3>6401</h3>
+                <p>Satisfied Clients</p>
+              </div>
+              <div class="stat-item">
+                <h3>19366</h3>
+                <p>Sessions Completed</p>
+              </div>
+              <div class="stat-item">
+                <h3>64</h3>
+                <p>Specialists</p>
+              </div>
+              <div class="stat-item">
+                <h3>8 Years</h3>
+                <p>Average Therapist Experience</p>
+              </div>
+            </section>
+
+            <!-- Features Section -->
+            <section class="features">
+              <div class="feature-card">
+                  <img src="{{ url_for('static', filename='images/img1.png') }}" alt="Image">
+                <h2>Support Anytime</h2>
+                <p>Online sessions from any location and on any device for your convenience.</p>
+              </div>
+              <div class="feature-card">
+                  <img src="{{ url_for('static', filename='images/img_5.png') }}" alt="Image">
+                <h2>Tailored Recommendations</h2>
+                <p>A user-friendly recommendation system to help you find the best match.</p>
+              </div>
+              <div class="feature-card">
+                  <img src="{{ url_for('static', filename='images/img7.png') }}" alt="Image">
+                <h2>Trusted Environment</h2>
+                <p>Complete confidentiality ensured by a secure communication platform.</p>
+              </div>
+            </section>
+
+            <div class="services">
+              <div class="service-card">
+                <div class="service-text">
+                  <h2>Easy to start & Easy to use</h2>
+                  <p>Just fill out the questionnaire and get a quick start</p>
+                    <p>
+Change a therapist if necessary without any additional charge</p>
+                </div>
+                  <img src="{{ url_for('static', filename='images/img_4.png') }}" alt="Image">
+              </div>
+            </div>
+
+          </div>
+
+
+
+        <script>
+            // JavaScript to scroll to the Learn More section smoothly
+            function scrollToLearnMore() {
+                const learnMoreSection = document.getElementById('learn-more-section');
+
+                // Scroll smoothly to the Learn More section
+                learnMoreSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        </script>
+
+
+
+
+    </div>
+ <script>
+        window.addEventListener('load', function() {
+            // Replace the current state with the main page, effectively removing previous pages
+            if (window.history.state) {
+                window.history.replaceState({}, document.title, "/");
+            }
+
+            // Optionally clear session storage or local storage if needed
+            sessionStorage.clear();
+            localStorage.clear();
+        });
     </script>
 </body>
+
 </html>
+
+
+
+
+
+
+
+
+

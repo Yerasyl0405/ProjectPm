@@ -1,9 +1,12 @@
 import os
-
+from datetime import datetime, timedelta
+from flask import current_app
+import requests
+from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Blueprint, render_template, request, redirect, url_for, session
 from werkzeug.utils import secure_filename
-
-from ..model import User, Question, Therapist, Answer
+import re
+from ..model import User, Question, Therapist, Answer, TherapistCategory, Booking
 from .. import db, bcrypt
 from flask_mail import Message
 import random
@@ -23,6 +26,9 @@ auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
+    username = request.args.get('username')  # Get the 'username' from the URL query parameters
+    error = None  # Initialize error variable
+
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
@@ -32,40 +38,39 @@ def login():
         if not user:
             user = Therapist.query.filter_by(email=email).first()
 
-        ans = Answer.query.filter_by(email=email).first()
-
-        # If there's an Answer, redirect to home
-        if ans:
-            return render_template("home.html")
-
         # Validate user credentials
-        if user and bcrypt.check_password_hash(user.password, password):
+        if user and bcrypt.check_password_hash(user.password, password) and user.email_verified:
             session['user_id'] = user.id  # Store user ID in session
             session['user_type'] = 'User' if isinstance(user, User) else 'Therapist'  # Store user type
 
             if isinstance(user, User):
                 # Redirect to user dashboard or first question
-                first_question = Question.query.order_by(Question.id).first()
-                if first_question:
-                    return redirect(url_for('question.questions', question_id=first_question.id))
-                else:
-                    return "No questions available."
+                return redirect(url_for('auth.user_profile', id=user.id))
             elif isinstance(user, Therapist):
                 # Redirect to therapist's profile or dashboard
-                return redirect(url_for('auth.therapist_profile', therapist_id=user.id))
+                return redirect(url_for('auth.therapist_profile', id=user.id))
         else:
-            return redirect(url_for('auth.login'))
+            error = "Invalid email or password"  # Set error message
 
-    return render_template('login.html')
-
+    return render_template('login.html', username=username, error=error)  # Pass error to the template
 
 
 # Генерация кода подтверждения
 def generate_verification_code():
     return ''.join(random.choices(string.digits, k=6))
 
+def is_email_valid(email):
+    api_key = "b72a44e8d91f4ed8a4ef088467ff9fc8"
+    url = f"https://api.zerobounce.net/v2/validate?api_key={api_key}&email={email}"
+
+    response = requests.get(url)
+    if response.status_code == 200:
+        result = response.json()
+        return result.get('status') == 'valid'  # Проверяем статус ответа
+    return False
+
 # Отправка email с кодом подтверждения
-def send_verification_email(user_email, verification_code):
+def send_verification_emaill(user_email, verification_code):
     msg = Message('Email Verification Code', recipients=[user_email])
     msg.body = f'Your email verification code is {verification_code}. Please enter it on the verification page.'
     mail.send(msg)
@@ -74,44 +79,49 @@ def generate_verification_code():
     return ''.join(random.choices(string.digits, k=6))
 
 # Отправка email с кодом подтверждения
-def send_verification_email(user_email, verification_code):
-    msg = Message('Email Verification Code', recipients=[user_email])
-    msg.body = f'Your email verification code is {verification_code}. Please enter it on the verification page.'
-    mail.send(msg)
-
+def is_valid_password(password):
+    if len(password) < 8:
+        return False  # Длина меньше 8 символов
+    if not re.search(r"[A-Za-z]", password):
+        return False  # Нет букв
+    if not re.search(r"\d", password):
+        return False  # Нет цифр
+    return True
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         first_name = request.form['first_name']
         last_name = request.form['last_name']
-        username = request.form['username']
         email = request.form['email']
         password = request.form['password']
-        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-
-        # Check the user type (user or therapist)
         user_type = request.form['user_type']
-
-        # Check if the username or email already exists
-        if User.query.filter_by(username=username).first() or Therapist.query.filter_by(username=username).first():
-            session['error'] = "Username already exists."
-
+        selected_categories = request.form.getlist('issues')
+        if not is_valid_password(password):
+            session['error'] = "Password must be at least 8 characters long and contain both letters and numbers."
             return redirect(url_for('auth.register'))
 
+        # Проверяем, существует ли email
+        if not is_email_valid(email):
+            session['error'] = "The provided email address is invalid or does not exist."
+            return redirect(url_for('auth.register'))
+
+        # Проверяем, не используется ли email уже
         if User.query.filter_by(email=email).first() or Therapist.query.filter_by(email=email).first():
             session['error'] = "Email already exists."
             return redirect(url_for('auth.register'))
 
-        # Generate verification code
+        # Хешируем пароль
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+
+        # Генерируем код подтверждения
         verification_code = generate_verification_code()
 
         if user_type == 'user':
-            # Register as a User
+            # Регистрация как пользователь
             new_user = User(
                 first_name=first_name,
                 last_name=last_name,
-                username=username,
                 email=email,
                 password=hashed_password,
                 verification_code=verification_code
@@ -119,47 +129,35 @@ def register():
             db.session.add(new_user)
             db.session.commit()
 
-            # Send verification email
-            send_verification_email(email, verification_code)
+            # Отправляем email с кодом подтверждения
+            send_verification_emaill(email, verification_code)
 
-            # Redirect to email verification page
+            # Перенаправляем на страницу подтверждения email
             return redirect(url_for('auth.verify_email', user_id=new_user.id))
 
         elif user_type == 'therapist':
-            # Register as a Therapist
-            specialty = request.form['specialty']
-            certificate = request.files['certificate']
-
-            # Save the certificate file
-            if not certificate:
-                session['error'] = "Please upload a certificate."
-
-                return redirect(url_for('auth.register'))
-
-            upload_folder = os.path.join(os.getcwd(), 'uploads')
-            os.makedirs(upload_folder, exist_ok=True)
-            certificate_path = os.path.join(upload_folder, secure_filename(certificate.filename))
-            certificate.save(certificate_path)
-
+            # Регистрация как терапевт
             new_therapist = Therapist(
                 first_name=first_name,
                 last_name=last_name,
-                username=username,
                 email=email,
                 password=hashed_password,
-                specialty=specialty,
-                certificate_path=certificate_path,
                 verification_code=verification_code
             )
             db.session.add(new_therapist)
             db.session.commit()
+            for category in selected_categories:
+                therapist_category = TherapistCategory(therapist_id=new_therapist.id, category_name=category)
+                db.session.add(therapist_category)
 
-            # Send verification email
-            send_verification_email(email, verification_code)
+            db.session.commit()
+            # Отправляем email с кодом подтверждения
+            send_verification_emaill(email, verification_code)
 
-            # Redirect to email verification page
+            # Перенаправляем на страницу подтверждения email
             return redirect(url_for('auth.verify_email', user_id=new_therapist.id))
 
+    # Получаем возможную ошибку из сессии
     error = session.pop('error', None)
     return render_template('registration.html', error=error)
 
@@ -171,6 +169,8 @@ def verify_email(user_id):
     if not user:
         return "User or Therapist not found."
 
+    error_message = None  # Initialize error message
+
     if request.method == 'POST':
         entered_code = request.form['verification_code']
 
@@ -180,6 +180,24 @@ def verify_email(user_id):
             db.session.commit()
             return redirect(url_for('auth.login'))  # Redirect to login page
         else:
-            return "Invalid verification code. Please try again."
+            error_message = "Invalid verification code. Please try again."
 
-    return render_template('verify_email.html', user=user)
+    return render_template('verify_email.html', user=user, error_message=error_message)
+
+
+
+@auth_bp.after_request
+def disable_cache(response):
+    if request.endpoint == '/login':  # Только для страницы логина
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '-1'
+    return response
+
+@auth_bp.route("/index")
+def ind():
+    return render_template("index.html")
+
+
+
+

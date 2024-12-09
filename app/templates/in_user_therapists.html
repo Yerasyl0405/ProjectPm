@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <style>body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    color: #343a40;
+}
+.video-container {
+    display: inline-block;
+    margin: 10px;
+}
+
+.video-container iframe {
+    max-width: 100%;
+    height: 315px; /* Fixed height for uniformity */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Flexbox for horizontal layout */
+.video_section {
+    display: flex;
+    justify-content: center; /* Centers the videos horizontally */
+    align-items: center;
+    gap: 20px; /* Spacing between the videos */
+    flex-wrap: wrap; /* Ensures videos wrap on smaller screens */
+}
+
+@media (max-width: 768px) {
+    .video-container iframe {
+        height: 200px; /* Smaller height on mobile devices */
+    }
+}
+
+
+   h1 {
+            font-size: 36px;
+            font-weight: 500;
+            margin-bottom: 40px;
+            color: #222;
+        }
+
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    display: flex;
+    flex-wrap: wrap; /* Allow cards to wrap */
+    gap: 20px; /* Space between cards */
+    justify-content: center; /* Center cards horizontally */
+}
+
+ /* Контейнер с карточками */
+        .therapists-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        /* Карточка терапевта */
+        .therapist-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            align-items:center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+        }
+
+        .therapist-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Метка языка */
+        .language-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #333;
+            color: #fff;
+            font-size: 12px;
+            padding: 5px 10px;
+            border-radius: 15px;
+        }
+
+        /* Цена */
+        .price {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #007bff;
+        }
+
+        /* Профиль */
+        .profile {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        /* Кнопка "Подробнее" */
+        .button-detail {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 14px;
+            color: #fff;
+            background-color: #f5cc4e;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .button-detail:hover {
+            background-color: #e5b72e;
+        }
+
+
+.avatar-container {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #f1f1f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.avatar-preview {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.therapist-info h2 {
+    margin: 15px 0 5px;
+    font-size: 1.4rem;
+    color: #333;
+    font-weight: bold;
+}
+
+.therapist-info p {
+    margin: 5px 0;
+    color: #6c757d;
+    font-size: 1rem;
+}
+
+.heart-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 1.2rem;
+    color: #ff6b6b;
+    cursor: pointer;
+}
+
+.heart-icon:hover {
+    color: #e63946;
+}
+
+.select-button {
+    text-decoration: none;
+    background-color: #ffd700; /* Yellow button */
+    color: #343a40;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 10px;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.select-button:hover {
+    background-color: #ffc107;
+}
+</style>
+</head>
+
+
+<body>
+
+    <div class="container">
+        {% for therapist in therapists %}
+        <div class="therapist-card">
+        <div class="language-badge">ENG</div>
+        <h2 class="therapist-name"> {{ therapist.first_name }} {{ therapist.last_name }}</h2>
+        <p class="price">19000 ₸ / 1 hour</p>
+        <p class="profile">{{ therapist.specialty }}</p>
+        <div class="button-container">
+                <a href="{{ url_for('auth.user_view_therapist', id=therapist.id) }}" class="button-detail">Подробнее</a>
+            <!-- Webex link button below Learn More button -->
+        </div>
+    </div>
+        {% endfor %}
+    </div>
+
+
+<h1>
+
+
+
+</h1>
+
+
+
+
+
+
+<section>
+
+    <div class="video_section">
+
+
+        <!-- Embed YouTube Videos -->
+        <div class="video-container">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID_1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-container">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID_2" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-container">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID_3" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+</section>
+
+
+</body>
+
+
+
+</html>>

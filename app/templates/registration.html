@@ -3,209 +3,360 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration</title>
+    <title>Therapist Registration</title>
     <style>
-        body {
-        display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f9f9f9;
+/* Reset default margins and paddings */
+
+/* Navbar Styling */
+
+
+          /* General body and page settings */
+          body {
+              margin: 0;  /* Remove default margin */
+              padding: 0; /* Remove default padding */
+          }
+
+          .left-image {
+              position: left;   /* Absolute positioning */
+              left: 0;              /* Align image to the left */
+              bottom: 0;            /* Align image to the bottom */
+              width: auto;          /* Allow the image to keep its natural width */
+              height: auto;         /* Allow the image to keep its natural height */
+              max-width: 100%;      /* Ensure it doesn’t overflow the viewport width */
+              max-height: 100%;
+                   z-index: -1;/* Ensure it doesn’t overflow the viewport height */
+          }
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #1E1E3C;
+    color: #FFF;
+    width: 100%;
 }
 
-        .form-container {
-           width: 400px;
-  padding: 20px;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-        }
+.nav-buttons {
+    display: flex;
+    gap: 10px;
+}
 
-        h1 {
-            font-size: 24px;
-  color: #2a4d8f;
-  margin-bottom: 20px;
-        }
+/* Login button */
+.login-btn {
+    background-color: #BDA8EE;
+    color: #1E1E3C;
+    border: none;
+    border-radius: 5px;
+    padding: 2px 20px; /* Reduced padding for smaller button height */
+    cursor: pointer;
+    font-size: 14px; /* Adjust font size if needed */
+}
 
-        .tab-buttons {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
+/* Get Started / Sign Up button */
+.get-started-btn {
+    background-color: #272E54;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 15px; /* Reduced padding for smaller button height */
+    cursor: pointer;
+    font-size: 14px; /* Adjust font size if needed */
+}
 
-        .tab-buttons button {
-            background: none;
-           color: #2a4d8f;
+/* Button Hover Effects */
+.nav-buttons button:hover {
+    background-color: #e67e22;
+}
 
-            border: none;
-            font-size: 16px;
-            font-weight: bold;
-            margin: 0 10px;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
+/* Optional: Adjust button font size for better consistency */
+.nav-buttons button {
+    font-size: 14px; /* Adjust font size of the buttons */
+}
 
-        .tab-buttons button.active {
-            color: #FFC107;
-            border-bottom: 2px solid #FFC107;
-        }
 
-        .tab-buttons button:hover {
-            color: #FFC107;
-        }
 
-        form {
-            display: none;
-            flex-direction: column;
-        }
 
-        form.active {
-            display: flex;
-        }
 
-        label {
-          display: block;
-  font-size: 14px;
-  margin-bottom: 5px;
-  color: #333;
+
+
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Trirong", serif;
+}
+
+   .main_container   {
+
+   .justify_content:center
+   }
+
+   .form_group{
+   justify_content:center
+   }
+
+   h1 {
+       margin-top: 20px; /* Add space above the heading */
+       font-size: 24px;
+       color: #333;
+       text-align: left;
+       justify-content: center
+   }
+
+
+/* Body styling */
+body {
+    font-family: "Trirong", serif;
+    background-color: #7FADEO;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center vertically */
+    align-items: center;     /* Center horizontally */
+    min-height: 100vh;
+       }/* Full viewport height */
+
+    body img{
+
+       max-width: 200px
+       height:auto
+       margin-right: 20px
+
+    }
+
+
+
+/* Container styling */
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 100%;  /* Allow container to be responsive */
+    margin-top: 20px; /* Optional, space above the form */
+}
+
+
+/* Heading Styling */
+/*h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
     text-align: left;
-        }
+}  */
 
-        input {
-          width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-        }
+/* Form group styling */
+.form-group {
+    margin-bottom: 15px;
+}
 
-        input:focus {
-       border-color: #2a4d8f;
-  outline: none;
-        }
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+}
 
-        input::placeholder {
-            color: #B5B5B5;
-      font-style: italic;
-        }
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+    width: 100%;         /* Полная ширина */
+    max-width: 100%;     /* Предотвращение переполнения */
+    padding: 12px;       /* Увеличенные внутренние отступы */
+    font-size: 16px;     /* Увеличенный шрифт для визуальной гармонии */
+    border: 1px solid #ddd;
+    border-radius: 8px;  /* Скруглённые углы */
+    box-sizing: border-box;
+}
 
-        button.submit-btn {
-             background-color: #4caf50;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-        }
 
-        button.submit-btn:hover {
-                background-color: #45a049;
+textarea {
+    resize: vertical;
+}
 
-        }
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
 
-        .error {
-            color: #FF6B6B;
-            margin-bottom: 15px;
-            font-size: 14px;
-            text-align: center;
-        }
+.checkbox-group div {
+    display: flex;
+    align-items: center;
+}
 
-        @media (max-width: 480px) {
-            .form-container {
-                padding: 30px 20px;
-            }
+input[type="checkbox"] {
+    margin-right: 5px;
+}
 
-            h1 {
-                font-size: 26px;
-            }
+/* Button Styling */
+button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #BDA8EE;
+    color: #7FADEO;
+    border: none;
+    border-radius: 15px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
 
-            input, button {
-                font-size: 14px;
-                padding: 10px;
-            }
-        }
+button:hover {
+    background-color: #B0B0B0;
+}
+
+/* Password field styling */
+.form-group input[type="password"] {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+/* Highlight Password Field */
+.form-group input[type="password"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+    background-color: #e6f7ff; /* Highlight background */
+}
+
+
+footer {
+    background-color: #006699;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+footer p {
+    font-size: 14px;
+}
+        .logo {
+    color: #FFFFFF; /* Белый цвет */
+    font-size: 24px; /* Размер шрифта, при необходимости */
+    font-weight: bold; /* Жирный шрифт, если требуется */
+    text-decoration: none; /* Убирает подчеркивание у ссылки */
+}
     </style>
 </head>
-<body>
-    <div class="form-container">
-        <h1>Registration</h1>
-        <div class="tab-buttons">
-            <button class="tab-btn active" onclick="showForm('userForm')">User</button>
-            <button class="tab-btn" onclick="showForm('therapistForm')">Therapist</button>
-        </div>
 
-        <!-- Error message -->
-        {% if error %}
-            <div class="error">{{ error }}</div>
+<header class="navbar">
+    <a href="/">
+        <div class="logo">HelpShare</div>
+    </a>
+    <div class="header-links">
+        <nav class="nav-links">
+            <!-- Add navigation links here if needed -->
+        </nav>
+
+        <div class="nav-buttons">
+
+        </div>
+    </div>
+</header>
+<body class='main_container'>
+
+    <div class="container">
+
+            <h1>Therapist Registration</h1>
+            {% if error %}
+        <p style="color: red;">{{ error }}</p>
         {% endif %}
 
-        <!-- Форма регистрации для пользователя -->
-        <form id="userForm" class="active" action="{{ url_for('auth.register') }}" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="user_type" value="user">
+
+            <form action="{{ url_for('auth.register') }}" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="user_type" value="therapist">
+
+            <div class="form-group">
 
             <label for="first_name">First Name:</label>
-            <input type="text" id="first_name" name="first_name" placeholder="Enter your first name" required>
 
+            <input type="text" id="first_name" name="first_name" placeholder="Enter your first name" required>
+           </div>
+            <div class="form-group">
             <label for="last_name">Last Name:</label>
             <input type="text" id="last_name" name="last_name" placeholder="Enter your last name" required>
+            </div>
 
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" placeholder="Enter your username" required>
-
+            <div class="form-group">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="form-group">
 
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+                <div class="form-group">
+                <label>Choose your specialization area</label>
+                <div class="checkbox-group">
+                    <div>
+                        <input type="checkbox" id="panic-attack" name="issues" value="Panic attacks">
+                        <label for="panic-attack">Addictions</label>
+                    </div>
 
-            <button type="submit" class="submit-btn">Register</button>
+                    <div>
+                        <input type="checkbox" id="partner" name="issues" value="Partner">
+                        <label for="partner">Crisis and Life worries</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="child" name="issues" value="Child">
+                        <label for="child">Relationships</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="trauma" name="issues" value="Trauma">
+                        <label for="trauma">Trauma healing</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="psychosomatics" name="issues" value="Psychosomatics">
+                        <label for="psychosomatics">Psychosomatics</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="behavioral" name="issues" value="Behavioral">
+                        <label for="behavioral">Personal growth and Career goals</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="coaching" name="issues" value="Coaching">
+                        <label for="coaching">Coaching</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="perinatal" name="issues" value="Perinatal">
+                        <label for="perinatal">Perinatal psychology</label>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <button type="submit">Register as Therapist</button>
         </form>
-
-        <!-- Форма регистрации для терапевта -->
-        <form id="therapistForm" action="{{ url_for('auth.register') }}" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="user_type" value="therapist">
-
-            <label for="first_name">First Name:</label>
-            <input type="text" id="first_name" name="first_name" placeholder="Enter your first name" required>
-
-            <label for="last_name">Last Name:</label>
-            <input type="text" id="last_name" name="last_name" placeholder="Enter your last name" required>
-
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" placeholder="Enter your username" required>
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" placeholder="Enter your email" required>
-
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password" required>
-
-            <label for="specialty">Specialty:</label>
-            <input type="text" id="specialty" name="specialty" placeholder="Enter your specialty" required>
-
-            <label for="certificate">Upload Certificate:</label>
-            <input type="file" id="certificate" name="certificate" accept="application/pdf,image/*" required>
-
-            <button type="submit" class="submit-btn">Register as Therapist</button>
-        </form>
-
     </div>
 
     <script>
-        function showForm(formId) {
-            document.querySelectorAll('form').forEach(form => {
-                form.classList.remove('active');
-            });
-            document.getElementById(formId).classList.add('active');
+        // Показ имени файла при выборе
+        const certificateInput = document.getElementById('certificate');
+        const fileNameDisplay = document.getElementById('file-name');
 
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-        }
+        certificateInput.addEventListener('change', (event) => {
+            const fileName = event.target.files[0]?.name || 'No file chosen';
+            fileNameDisplay.textContent = fileName;
+        });
     </script>
 </body>
 </html>
