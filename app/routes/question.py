@@ -517,3 +517,9 @@ def get_recommendations(user_id):
         # Return the list of recommended therapists
         return render_template('recomendations.html', user=user, recommended_therapists=recommended_therapists)
 
+@auth_bp.route('/chat', methods=['POST'])
+def chat():
+    data = request.get_json()
+    user_message = data.get('message', '')
+    response = f"You said: {user_message}"  # Пример ответа
+    return jsonify({'response': response})
