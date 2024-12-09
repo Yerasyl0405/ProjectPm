@@ -2,10 +2,14 @@ from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
 
+from flask_cors import CORS
+
 from app import create_app , db
 from app.model import Booking
 
 app = create_app()
+CORS(app)  # Разрешить CORS для всех маршрутов
+
 
 def delete_past_bookings():
     now = datetime.now()
